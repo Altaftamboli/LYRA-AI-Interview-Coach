@@ -175,6 +175,7 @@ PDF Report
 ## Contributors
 
 - Altaf Tamboli (Project Owner)
+- Rohan ingale (AI integration)
 - Manoj Khandare (Frontend Developer)
 
 ---
