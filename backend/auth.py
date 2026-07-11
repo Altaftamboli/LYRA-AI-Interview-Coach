@@ -1,12 +1,11 @@
 from flask import Blueprint, request, jsonify
-from backend.database import db
-from backend.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
+from backend.database import get_db_connection
 
 auth_bp = Blueprint("auth", __name__)
 
 
-# Register User
+# ------------------ Register ------------------ #
 @auth_bp.route("/register", methods=["POST"])
 def register():
 
@@ -16,23 +15,36 @@ def register():
     email = data.get("email")
     password = data.get("password")
 
-    # Check if email already exists
-    existing_user = User.query.filter_by(email=email).first()
+    if not name or not email or not password:
+        return jsonify({"message": "All fields are required"}), 400
 
-    if existing_user:
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+    user = cursor.fetchone()
+
+    if user:
+        cursor.close()
+        conn.close()
         return jsonify({"message": "Email already exists"}), 400
 
     hashed_password = generate_password_hash(password)
 
-    new_user = User(name=name, email=email, password_hash=hashed_password)
+    cursor.execute(
+        "INSERT INTO users (name, email, password) VALUES (%s,%s,%s)",
+        (name, email, hashed_password),
+    )
 
-    db.session.add(new_user)
-    db.session.commit()
+    conn.commit()
+
+    cursor.close()
+    conn.close()
 
     return jsonify({"message": "Registration Successful"}), 201
 
 
-# Login User
+# ------------------ Login ------------------ #
 @auth_bp.route("/login", methods=["POST"])
 def login():
 
@@ -41,11 +53,31 @@ def login():
     email = data.get("email")
     password = data.get("password")
 
-    user = User.query.filter_by(email=email).first()
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
 
-    if user and check_password_hash(user.password_hash, password):
-        return jsonify(
-            {"message": "Login Successful", "user_id": user.id, "name": user.name}
+    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+    user = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if user is None:
+        return jsonify({"message": "Invalid Email"}), 401
+
+    if check_password_hash(user["password"], password):
+        return (
+            jsonify(
+                {
+                    "message": "Login Successful",
+                    "user": {
+                        "id": user["id"],
+                        "name": user["name"],
+                        "email": user["email"],
+                    },
+                }
+            ),
+            200,
         )
 
-    return jsonify({"message": "Invalid Email or Password"}), 401
+    return jsonify({"message": "Invalid Password"}), 401

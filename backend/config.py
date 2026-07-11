@@ -1,8 +1,6 @@
-import os
+DB_HOST = "localhost"
+DB_USER = "root"
+DB_PASSWORD = "altaftamboli@2005"
+DB_NAME = "ai_interview_coach"
 
-
-class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY") or "ai_interview_secret_key"
-
-    SQLALCHEMY_DATABASE_URI = "sqlite:///interview.db"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+SECRET_KEY = "ai_interview_secret_key"
