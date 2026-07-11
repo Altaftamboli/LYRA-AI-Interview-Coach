@@ -1,0 +1,150 @@
+/* ===========================
+   RESPONSIVE DESIGN
+=========================== */
+
+/* Large Devices (≤ 992px) */
+@media screen and (max-width: 992px) {
+
+    .hero {
+        padding: 80px 20px;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+}
+
+/* Tablets (≤ 768px) */
+@media screen and (max-width: 768px) {
+
+    .navbar-brand {
+        font-size: 22px;
+    }
+
+    .hero {
+        padding: 60px 15px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .display-3 {
+        font-size: 3rem;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    textarea {
+        min-height: 180px;
+    }
+
+}
+
+/* Mobile (≤ 576px) */
+@media screen and (max-width: 576px) {
+
+    body {
+        font-size: 14px;
+    }
+
+    .navbar-brand {
+        font-size: 20px;
+    }
+
+    .hero {
+        padding: 50px 15px;
+    }
+
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .card h2 {
+        font-size: 24px;
+    }
+
+    .card h3 {
+        font-size: 20px;
+    }
+
+    .card h4 {
+        font-size: 18px;
+    }
+
+    .form-control {
+        font-size: 15px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 15px;
+    }
+
+    .display-3 {
+        font-size: 2.5rem;
+    }
+
+    footer {
+        text-align: center;
+        font-size: 14px;
+    }
+
+}
+
+/* Small Mobile (≤ 400px) */
+@media screen and (max-width: 400px) {
+
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .navbar-brand {
+        font-size: 18px;
+    }
+
+    .display-3 {
+        font-size: 2rem;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+}
