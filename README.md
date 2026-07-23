@@ -1,112 +1,98 @@
-# AI Interview Coach
+# 🤖 LYRA – AI Interview Coach
 
-## Overview
-
-AI Interview Coach is a web-based application that helps users prepare for technical interviews. It provides user authentication, an interview dashboard, AI-based interview pages, result analysis, and report generation using a Flask backend with a responsive frontend.
+LYRA – AI Interview Coach is a full-stack AI-powered web application that helps students and job seekers prepare for technical interviews through interactive mock interview sessions. The platform generates AI-powered interview questions, evaluates user responses, provides detailed feedback, and generates interview reports.
 
 ---
 
-## Features
+## 🚀 Features
 
-- User Registration
-- User Login
-- Dashboard
-- AI Interview Page
-- Interview Result Page
-- PDF Report Export
-- Responsive UI
-- Flask Backend
-- MySQL Database Integration
+- 🔐 User Registration & Login
+- 👤 User Profile Management
+- 🤖 AI-Powered Interview Sessions
+- 💬 Dynamic Interview Questions using Google Gemini API
+- 📊 AI Answer Evaluation & Feedback
+- 📄 PDF Interview Report Generation
+- 📈 Interview Result Analysis
+- 💾 MySQL Database Integration
+- 📱 Responsive User Interface
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
 ### Frontend
 - HTML5
 - CSS3
-- Bootstrap 5
 - JavaScript
+- Bootstrap
 
 ### Backend
 - Python
 - Flask
+
+### Database
 - MySQL
-- Werkzeug
+
+### AI Integration
+- Google Gemini API
+
+### Tools
+- Git
+- GitHub
+- VS Code
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
 ```
-Group-project/
-│
-├── backend/
-│   ├── auth.py
-│   ├── database.py
-│   ├── interview.py
-│   ├── pdf_export.py
-│   ├── report.py
-│   ├── routes.py
-│   └── config.py
-│
-├── templates/
-│   ├── index.html
-│   ├── login.html
-│   ├── register.html
-│   ├── dashboard.html
-│   ├── interview.html
-│   └── result.html
-│
-├── static/
-│   ├── style.css
-│   ├── responsive.css
-│   └── js/
-│       ├── login.js
-│       ├── register.js
-│       ├── dashboard.js
-│       ├── interview.js
-│       └── result.js
+LYRA-AI-Interview-Coach/
 │
 ├── app.py
+├── backend/
+│   ├── auth.py
+│   ├── routes.py
+│   ├── database.py
+│   ├── interview.py
+│   ├── report.py
+│   ├── pdf_export.py
+│   └── ai/
+│       ├── ai_service.py
+│       ├── prompts.py
+│       ├── question_generator.py
+│       ├── answer_evaluator.py
+│       └── interview_manager.py
+│
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── images/
+│
+├── templates/
+│
+├── uploads/
+│
+├── reports/
+│
+├── .env
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## Installation
+## ⚙ Installation
 
 ### Clone Repository
 
 ```bash
-git clone https://github.com/Altaftamboli/Group-project.git
+git clone https://github.com/Altaftamboli/LYRA-AI-Interview-Coach.git
 ```
 
-### Open Project
+### Move into Project
 
 ```bash
-cd Group-project
-```
-
-### Create Virtual Environment
-
-```bash
-python -m venv .venv
-```
-
-### Activate Virtual Environment
-
-#### Windows
-
-```bash
-.venv\Scripts\activate
-```
-
-#### Linux/Mac
-
-```bash
-source .venv/bin/activate
+cd LYRA-AI-Interview-Coach
 ```
 
 ### Install Dependencies
@@ -115,25 +101,21 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
----
+### Configure Environment Variables
 
-## Configure Database
+Create a `.env` file.
 
-Create a MySQL database and update the connection details in:
-
-```
-backend/config.py
+```env
+GEMINI_API_KEY=YOUR_GEMINI_API_KEY
 ```
 
----
-
-## Run Application
+### Run Application
 
 ```bash
 python app.py
 ```
 
-Open in your browser:
+Open:
 
 ```
 http://127.0.0.1:5000
@@ -141,56 +123,39 @@ http://127.0.0.1:5000
 
 ---
 
-## Application Flow
+## 🎯 Future Enhancements
 
-```
-Home
-   ↓
-Register
-   ↓
-Login
-   ↓
-Dashboard
-   ↓
-Start Interview
-   ↓
-Interview
-   ↓
-Result
-   ↓
-PDF Report
-```
+- 🎙 Voice-based AI Interview
+- 📹 Live Interview Session
+- 🧠 Resume-based Question Generation
+- 📊 Performance Analytics Dashboard
+- ☁ Cloud Deployment
+- 📧 Email Authentication
+- 🏆 Interview History Tracking
 
 ---
 
-## API Endpoints
+## 👨‍💻 Contributors
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | /api/register | Register User |
-| POST | /api/login | User Login |
+### Altaf Tamboli
+- Backend Development
+- Flask Integration
+- MySQL Database
+- Authentication
+- Frontend–Backend Integration
+- AI Module Integration
 
----
-
-## Contributors
-
-- Altaf Tamboli (Project Owner)
-- Rohan ingale (AI Developer )
-- Manoj Khandare (Frontend Developer)
+### Rohan
+- Initial AI Integration using Google Gemini API
 
 ---
 
-## Future Improvements
+## 📜 License
 
-- AI Question Generation
-- JWT Authentication
-- Email Verification
-- Profile Management
-- Interview History
-- Performance Analytics
+This project is developed for educational and portfolio purposes.
 
 ---
 
-## License
+## ⭐ Support
 
-This project is developed for educational purposes.
+If you found this project useful, consider giving it a ⭐ on GitHub.
