@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (startBtn) {
         startBtn.addEventListener("click", () => {
-            window.location.href = "interview.html";
+            window.location.href = "/interview";
         });
     }
 
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (resultBtn) {
         resultBtn.addEventListener("click", () => {
-            window.location.href = "result.html";
+            window.location.href = "/result";
         });
     }
 
@@ -40,10 +40,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 localStorage.removeItem("username");
                 localStorage.removeItem("isLoggedIn");
 
-                window.location.href = "login.html";
+                window.location.href = "/login";
                 
             }
         });
     }
 
 });
+
+function startInterview() {
+
+    const role = document.getElementById("role").value;
+    const difficulty = document.getElementById("difficulty").value;
+    const questions = document.getElementById("questions").value;
+
+    localStorage.setItem("role", role);
+    localStorage.setItem("difficulty", difficulty);
+    localStorage.setItem("questions", questions);
+
+    window.location.href = "/interview";
+}

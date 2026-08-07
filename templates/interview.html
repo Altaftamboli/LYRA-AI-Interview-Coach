@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="stylesheet" href="static/style.css">
+<link rel="stylesheet" href="static/responsive.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview - AI Interview Coach</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body class="bg-light">
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#"><h1><b>LYRA</b></h1>AI Interview Coach</a>
+       
+
+        <span class="text-white">
+            Time Left:
+            <span id="timer" class="fw-bold text-warning">15:00</span>
+        </span>
+    </div>
+</nav>
+
+<div class="container mt-5">
+
+    Interview Details
+    <div class="card shadow mb-4">
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <h5>Job role</h5>
+                        <select id="role">
+                            <option>Python Developer</option>
+                            <option>Java Developer</option>
+                            <option>Frontend Developer</option>
+                            <option>Backend Developer</option>
+                            <option>Full Stack Developer</option>
+                            <option>Data Analyst</option>
+                            <option>Data Scientist</option>
+                            <option>AI / ML Engineer</option>
+                            <option>SQL Developer</option>
+                            <option>HR Interview</option>
+                        </select>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>Difficulty Lavel</h5>
+                    <select id="difficulty">
+                        <option>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>Question</h5>
+                    <select id="questions">
+                        <option>5</option>
+                        <option selected>10</option>
+                        <option>15</option>
+                    </select>
+                </div>
+            
+            </div>
+
+        </div>
+       
+    </div>
+
+    <div class="d-flex justify-content-centre mt-3">
+        <button id="startBtn" class="btn btn-primary px-5">
+            Start Interview
+        </button>
+    </div>
+</br>
+</br>
+
+    
+<div class="card shadow mt-4">
+
+    <div class="card-header bg-primary text-white">
+
+        <h4>Interview Question</h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <h5 id="question">
+
+            Click "Start Interview" to generate AI questions.
+
+        </h5>
+
+        <br>
+
+        <textarea id="answer" class="form-control" rows="6" placeholder="Write your answer here..."></textarea>
+
+        <br>
+
+        <button id="nextBtn" class="btn btn-success">
+
+            Next Question
+
+        </button>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+</body>

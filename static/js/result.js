@@ -82,6 +82,6 @@ const dashboardBtn = document.querySelector(".btn-primary");
 
 if (dashboardBtn) {
     dashboardBtn.addEventListener("click", function () {
-        window.location.href = "dashboard.html";
+        window.location.href = "/dashboard";
     });
 }

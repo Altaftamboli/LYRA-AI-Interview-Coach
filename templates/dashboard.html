@@ -12,24 +12,18 @@
 
 <body class="bg-light">
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
 
-        <a class="navbar-brand fw-bold" href="#">AI Interview Coach</a>
-        <a href="dashboard.html" class="btn btn-primary">
-    Back to Dashboard
-          </a>
-
-        <div class="ms-auto">
-            <a href="index.html" class="btn btn-outline-light me-2">Home</a>
-            <a href="login.html" class="btn btn-danger">Logout</a>
-            <a href="interview.html">Start Interview</a>
-        </div>
-
+<nav class="navbar">
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/lyra-logo.png') }}" alt="LYRA Logo"
+            class="header-logo">
+    </div>
+    <div class="nav-links">
+        <a href="/index" class="btn btn-outline-light me-2">Home</a>
+        <a href="/interview" class="btn btn-primary me-2">Start Interview</a>
+        <a href="/login" class="btn btn-danger">Logout</a>
     </div>
 </nav>
-
 <!-- Dashboard -->
 <div class="container mt-5">
 
@@ -42,7 +36,7 @@
             <div class="card shadow text-center p-4 h-100">
                 <h4>🎯 Start Interview</h4>
                 <p>Practice technical interviews with AI-generated questions.</p>
-                <a href="interview.html" class="btn btn-primary">
+                <a href="/interview" class="btn btn-primary">
                     Start Now
                 </a>
             </div>
@@ -53,24 +47,70 @@
             <div class="card shadow text-center p-4 h-100">
                 <h4>📊 Previous Reports</h4>
                 <p>View your previous interview scores and reports.</p>
-                <a href="result.html" class="btn btn-success">
+                <a href="/result" class="btn btn-success">
                     View Reports
                 </a>
             </div>
         </div>
 
-        <!-- Profile -->
+
         <div class="col-md-4 mb-4">
             <div class="card shadow text-center p-4 h-100">
                 <h4>👤 My Profile</h4>
                 <p>Manage your account information.</p>
-                <button class="btn btn-secondary">
-                    Edit Profile
-                </button>
+                <a href="/profile" class="btn btn-info text-white">Edit Profile</a>
             </div>
         </div>
-
     </div>
+
+
+
+<div class="container mt-5">
+    
+    <div class="row">
+    
+            <!-- Start Interview -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow text-center p-4 h-100">
+                <h4>🎤 Mock Interview</h4>
+                <p>Practice For mock interview with LYRA</p>
+                <a href="/interview" class="btn btn-primary">
+                        Comming soon..!
+                </a>
+            </div>
+        </div>
+    
+        <!-- Previous Reports -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow text-center p-4 h-100">
+                <h4> 🖥️ Live Interview</h4>
+                <p>Prepare For technical/HR Interview</p>
+                 <a href="/result" class="btn btn-success">
+                        Get Primium
+                </a>
+            </div>
+        </div>
+    
+    
+        <div class="col-md-4 mb-4">
+            <div class="card shadow text-center p-4 h-100">
+                <h4>🎥 Demo Session</h4>
+                <p>Take Live Demo Session</p>
+                <a href="/profile" class="btn btn-info text-white">Get Primium</a>
+            </div>
+         </div>
+    </div>
+
+
+        
+    
+
+    
+
+        
+    
+
+    
 
     <!-- Recent Interview History -->
     <div class="card shadow mt-4">

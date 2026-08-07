@@ -13,13 +13,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
 
-        // Check Empty Fields
+        
         if (email === "" || password === "") {
             alert("Please fill all fields.");
             return;
         }
 
-        // Email Validation
+        
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailPattern.test(email)) {
@@ -27,26 +27,32 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Get Registered User
+        
         const user = JSON.parse(localStorage.getItem("user"));
 
         if (!user) {
             alert("No account found. Please register first.");
-            window.location.href = "register.html";
+            window.location.href = "/register";
             return;
         }
 
-        // Check Credentials
+        
         if (email === user.email && password === user.password) {
 
-            alert("Login Successful!");
 
-            // Save Login Status
+
+            console.log("Redirecting to dashboard...");
             localStorage.setItem("isLoggedIn", "true");
+            window.location.href = "/dashboard";
 
-            // Redirect to Dashboard
-            window.location.href = "dashboard.html";
-            window.location.href = "login.html";
+            // alert("Login Successful!");
+
+            
+            // localStorage.setItem("isLoggedIn", "true");
+
+            
+            // window.location.href = "/dashboard";
+            // window.location.href = "/login";
 
         } else {
 

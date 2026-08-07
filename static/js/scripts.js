@@ -18,7 +18,7 @@ if (loginForm) {
         }
 
         alert("Login Successful!");
-        window.location.href = "dashboard.html";
+        window.location.href = "/dashboard";
     });
 }
 
@@ -45,7 +45,7 @@ if (registerForm) {
         }
 
         alert("Registration Successful!");
-        window.location.href = "login.html";
+        window.location.href = "/login";
     });
 }
 

@@ -1,120 +1,40 @@
-// ===============================
-// AI Interview Coach - interview.js
-// ===============================
+document.getElementById("startBtn").addEventListener("click", async function () {
 
-// Sample Questions
-const questions = [
-    "What is HTML?",
-    "What is the difference between HTML and HTML5?",
-    "Explain CSS Box Model.",
-    "What is Flexbox?",
-    "What is JavaScript?",
-    "Difference between var, let and const?",
-    "What is DOM?",
-    "What is Bootstrap?",
-    "What is Responsive Web Design?",
-    "What are API and JSON?"
-];
+    const role = document.getElementById("role").value;
+    const difficulty = document.getElementById("difficulty").value;
+    const questions = document.getElementById("questions").value;
 
-let currentQuestion = 0;
+    try {
 
-// Elements
-const questionElement = document.getElementById("question");
-const answerElement = document.getElementById("answer");
+        const response = await fetch("/api/start-interview", {
 
-// Show Question
-function loadQuestion() {
-    questionElement.innerText = questions[currentQuestion];
-}
+            method: "POST",
 
-// Load first question
-if (questionElement) {
-    loadQuestion();
-}
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-// Next Button
-const nextBtn = document.querySelector(".btn-primary");
+            body: JSON.stringify({
+                role,
+                difficulty,
+                questions
+            })
 
-if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
+        });
 
-        if (answerElement.value.trim() === "") {
-            alert("Please answer the question.");
-            return;
-        }
+        const data = await response.json();
 
-        answerElement.value = "";
+        document.getElementById("question").innerText =
+            data.questions;
 
-        if (currentQuestion < questions.length - 1) {
-            currentQuestion++;
-            loadQuestion();
-        } else {
-            alert("All questions completed.");
-        }
+    }
 
-    });
-}
+    catch (error) {
 
-// Previous Button
-const previousBtn = document.querySelector(".btn-secondary");
+        console.error(error);
 
-if (previousBtn) {
-    previousBtn.addEventListener("click", () => {
+        alert("Failed to generate AI questions.");
 
-        if (currentQuestion > 0) {
-            currentQuestion--;
-            loadQuestion();
-        }
+    }
 
-    });
-}
-
-// Submit Button
-const submitBtn = document.querySelector(".btn-success");
-
-if (submitBtn) {
-    submitBtn.addEventListener("click", () => {
-
-        if (confirm("Submit Interview?")) {
-            window.location.href = "result.html";
-        }
-
-    });
-}
-
-// Interview Timer
-const timer = document.getElementById("timer");
-
-if (timer) {
-
-    let minutes = 15;
-    let seconds = 0;
-
-    const countdown = setInterval(() => {
-
-        if (seconds === 0) {
-
-            if (minutes === 0) {
-                clearInterval(countdown);
-                alert("Time is over!");
-                window.location.href = "result.html";
-                return;
-            }
-
-            minutes--;
-            seconds = 59;
-
-        } else {
-            seconds--;
-        }
-        document.getElementById("submitBtn").addEventListener("click", function () {
-          window.location.href = "result.html";
 });
-
-        timer.innerHTML =
-            String(minutes).padStart(2, "0") + ":" +
-            String(seconds).padStart(2, "0");
-
-    }, 1000);
-
-}
