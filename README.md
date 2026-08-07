@@ -86,7 +86,7 @@ LYRA-AI-Interview-Coach/
 ### Clone Repository
 
 ```bash
-git clone https://github.com/Altaftamboli/LYRA-AI-Interview-Coach.git
+https://github.com/Altaftamboli/LYRA-AI-Interview-Coach.git
 ```
 
 ### Move into Project
