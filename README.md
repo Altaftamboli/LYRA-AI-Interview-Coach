@@ -137,6 +137,14 @@ http://127.0.0.1:5000
 
 ## 👨‍💻 Contributors
 
+### Manoj 
+- Frontend Development
+- Responsive UI Design
+- Landing Page Development
+- Interview Dashboard
+- Login & Authentication UI
+- Interview History Interface
+
 ### Altaf Tamboli
 - Backend Development
 - Flask Integration
@@ -146,7 +154,13 @@ http://127.0.0.1:5000
 - AI Module Integration
 
 ### Rohan
-- Initial AI Integration using Google Gemini API
+- AI module development
+- LLM integration (Gemini/Groq)
+- Prompt engineering
+- AI answer evaluation and scoring
+- AI report generation
+- AI Module testing and debugging
+- API Key Management
 
 ---
 
