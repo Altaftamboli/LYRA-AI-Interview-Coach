@@ -149,7 +149,7 @@ http://127.0.0.1:5000
 - Backend Development
 - Flask Integration
 - MySQL Database
-- Authentication
+- Google Authentication
 - Frontend–Backend Integration
 - AI Module Integration
 
