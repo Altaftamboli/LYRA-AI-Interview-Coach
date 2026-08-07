@@ -94,6 +94,35 @@ https://github.com/Altaftamboli/LYRA-AI-Interview-Coach.git
 ```bash
 cd LYRA-AI-Interview-Coach
 ```
+## 2. Create Virtual Environment
+
+### Windows
+
+```bash
+python -m venv .venv
+```
+
+Activate
+
+```bash
+.venv\Scripts\activate
+```
+
+### Linux / macOS
+
+```bash
+python3 -m venv .venv
+```
+
+Activate
+
+```bash
+source .venv/bin/activate
+```
+
+---
+
+
 
 ### Install Dependencies
 
