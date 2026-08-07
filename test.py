@@ -1,4 +1,5 @@
-from ai.llm_client import ask_llm
+# from ai.llm_client import ask_llm
+from backend.ai.llm_client import ask_llm
 from ai.prompts import generate_question_prompt, evaluate_answer_prompt
 import re
 

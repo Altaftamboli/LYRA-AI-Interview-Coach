@@ -1,6 +1,6 @@
 from groq import Groq
 
-from ai.config import GROQ_API_KEY, MODEL_NAME
+from backend.ai.config import GROQ_API_KEY, MODEL_NAME
 
 
 # Create Groq client

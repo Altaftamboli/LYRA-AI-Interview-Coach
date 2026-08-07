@@ -10,6 +10,7 @@ Generate ONE interview question.
 
 Role: {role}
 Difficulty: {difficulty}
+Do not repeat previous Questions:{previous_questions}
 
 Rules:
 - Ask only one question.
