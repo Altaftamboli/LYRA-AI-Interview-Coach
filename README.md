@@ -24,7 +24,6 @@ LYRA – AI Interview Coach is a full-stack AI-powered web application that help
 - HTML5
 - CSS3
 - JavaScript
-- Bootstrap
 
 ### Backend
 - Python
@@ -35,6 +34,7 @@ LYRA – AI Interview Coach is a full-stack AI-powered web application that help
 
 ### AI Integration
 - Google Gemini API
+- Groq API
 
 ### Tools
 - Git
