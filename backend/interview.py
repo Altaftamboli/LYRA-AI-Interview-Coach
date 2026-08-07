@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from backend.ai.question_generator import generate_questions
+# from backend.ai.question_generator import generate_questions
+from backend.ai.prompts import generate_question_prompt
 
 interview_bp = Blueprint("interview", __name__, url_prefix="/api")
 
