@@ -6,7 +6,6 @@ import os
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api")
 
-# ---------------- Google OAuth ---------------- #
 oauth = OAuth()
 
 google = oauth.register(
@@ -18,7 +17,6 @@ google = oauth.register(
 )
 
 
-# ---------------- Register ---------------- #
 @auth_bp.route("/register", methods=["POST"])
 def register():
 
@@ -32,32 +30,50 @@ def register():
         return jsonify({"message": "All fields are required"}), 400
 
     conn = get_db_connection()
+
+    if conn is None:
+        return jsonify({"message": "Database connection failed"}), 500
+
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
-    user = cursor.fetchone()
+    try:
 
-    if user:
+        cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
+
+        user = cursor.fetchone()
+
+        if user:
+            return jsonify({"message": "Email already exists"}), 400
+
+        hashed_password = generate_password_hash(password)
+
+        cursor.execute(
+            """
+            INSERT INTO users
+            (name, email, password_hash, role)
+            VALUES (%s, %s, %s, %s)
+            """,
+            (name, email, hashed_password, "user"),
+        )
+
+        conn.commit()
+
+        return jsonify({"message": "Registration Successful"}), 201
+
+    except Exception as e:
+
+        conn.rollback()
+
+        print("Registration Error:", e)
+
+        return jsonify({"message": "Registration failed"}), 500
+
+    finally:
+
         cursor.close()
         conn.close()
-        return jsonify({"message": "Email already exists"}), 400
-
-    hashed_password = generate_password_hash(password)
-
-    cursor.execute(
-        "INSERT INTO users(name,email,password) VALUES(%s,%s,%s)",
-        (name, email, hashed_password),
-    )
-
-    conn.commit()
-
-    cursor.close()
-    conn.close()
-
-    return jsonify({"message": "Registration Successful"}), 201
 
 
-# ---------------- Login ---------------- #
 @auth_bp.route("/login", methods=["POST"])
 def login():
 
@@ -66,50 +82,145 @@ def login():
     email = data.get("email")
     password = data.get("password")
 
+    if not email or not password:
+        return jsonify({"message": "Email and password are required"}), 400
+
     conn = get_db_connection()
+
+    if conn is None:
+        return jsonify({"message": "Database connection failed"}), 500
+
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
-    user = cursor.fetchone()
+    try:
 
-    cursor.close()
-    conn.close()
+        cursor.execute(
+            """
+            SELECT id, name, email, password_hash, role
+            FROM users
+            WHERE email = %s
+            """,
+            (email,),
+        )
+
+        user = cursor.fetchone()
+
+    finally:
+
+        cursor.close()
+        conn.close()
 
     if user is None:
         return jsonify({"message": "Invalid Email"}), 401
 
-    if check_password_hash(user["password"], password):
-        return (
-            jsonify(
-                {
-                    "message": "Login Successful",
-                    "user": {
-                        "id": user["id"],
-                        "name": user["name"],
-                        "email": user["email"],
-                    },
-                }
-            ),
-            200,
-        )
+    if not user["password_hash"]:
+        return jsonify({"message": "This account uses Google Login"}), 401
 
-    return jsonify({"message": "Invalid Password"}), 401
+    if not check_password_hash(user["password_hash"], password):
+        return jsonify({"message": "Invalid Password"}), 401
+
+    session["user"] = {
+        "id": user["id"],
+        "name": user["name"],
+        "email": user["email"],
+        "role": user["role"],
+    }
+
+    return (
+        jsonify(
+            {
+                "message": "Login Successful",
+                "user": {
+                    "id": user["id"],
+                    "name": user["name"],
+                    "email": user["email"],
+                    "role": user["role"],
+                },
+            }
+        ),
+        200,
+    )
 
 
-# ---------------- Google Login ---------------- #
 @auth_bp.route("/login/google")
 def google_login():
+
     redirect_uri = url_for("auth.google_callback", _external=True)
-    return google.authorize_redirect(redirect_uri)
+
+    return google.authorize_redirect(redirect_uri, prompt="select_account")
 
 
-# ---------------- Google Callback ---------------- #
 @auth_bp.route("/auth/google/callback")
 def google_callback():
 
-    token = google.authorize_access_token()
-    user = token["userinfo"]
+    try:
 
-    session["user"] = {"name": user["name"], "email": user["email"]}
+        token = google.authorize_access_token()
 
-    return redirect("/dashboard")
+        user_info = token.get("userinfo")
+
+        if not user_info:
+            user_info = google.userinfo()
+
+        name = user_info.get("name", "")
+        email = user_info.get("email", "")
+
+        if not email:
+            return "Google account email not available", 400
+
+        conn = get_db_connection()
+
+        if conn is None:
+            return "Database connection failed", 500
+
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+
+        user = cursor.fetchone()
+
+        if user:
+
+            user_id = user["id"]
+            role = user["role"]
+
+            cursor.execute(
+                """
+                UPDATE users
+                SET name = %s
+                WHERE id = %s
+                """,
+                (name, user_id),
+            )
+
+        else:
+
+            cursor.execute(
+                """
+                INSERT INTO users
+                (name, email, password_hash, role)
+                VALUES (%s, %s, %s, %s)
+                """,
+                (name, email, None, "user"),
+            )
+
+            user_id = cursor.lastrowid
+            role = "user"
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+        session["user"] = {"id": user_id, "name": name, "email": email, "role": role}
+
+        if role == "admin":
+            return redirect("/admin/dashboard")
+
+        return redirect("/dashboard")
+
+    except Exception as e:
+
+        print("Google Login Error:", e)
+
+        return "Google Login Failed", 500

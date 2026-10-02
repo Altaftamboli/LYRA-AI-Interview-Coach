@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify
 from backend.ai.prompts import generate_question_prompt
 from backend.ai.llm_client import ask_llm
 
+
 interview_bp = Blueprint("interview", __name__, url_prefix="/api")
 
 
@@ -10,7 +11,6 @@ interview_bp = Blueprint("interview", __name__, url_prefix="/api")
 def start_interview():
 
     data = request.get_json()
-
     role = data.get("role")
     difficulty = data.get("difficulty")
     question_count =int(data.get("questions",1))

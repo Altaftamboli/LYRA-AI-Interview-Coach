@@ -1,62 +1,56 @@
-// ===============================
-// AI Interview Coach - login.js
-// ===============================
-
 document.addEventListener("DOMContentLoaded", () => {
 
     const loginForm = document.getElementById("loginForm");
 
-    loginForm.addEventListener("submit", function (e) {
+    if (!loginForm) {
+        console.error("loginForm not found");
+        return;
+    }
+
+    loginForm.addEventListener("submit", async function (e) {
 
         e.preventDefault();
 
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
 
-        
-        if (email === "" || password === "") {
-            alert("Please fill all fields.");
+        if (!email || !password) {
+            alert("Please enter email and password.");
             return;
         }
 
-        
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        try {
 
-        if (!emailPattern.test(email)) {
-            alert("Please enter a valid email address.");
-            return;
-        }
+            const response = await fetch("/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
 
-        
-        const user = JSON.parse(localStorage.getItem("user"));
+            const data = await response.json();
 
-        if (!user) {
-            alert("No account found. Please register first.");
-            window.location.href = "/register";
-            return;
-        }
+            if (!response.ok) {
+                alert(data.message || "Invalid Email or Password!");
+                return;
+            }
 
-        
-        if (email === user.email && password === user.password) {
+            console.log("Login Successful:", data);
 
+            if (data.user.role === "admin") {
+                window.location.href = "/admin/dashboard";
+            } else {
+                window.location.href = "/dashboard";
+            }
 
+        } catch (error) {
 
-            console.log("Redirecting to dashboard...");
-            localStorage.setItem("isLoggedIn", "true");
-            window.location.href = "/dashboard";
-
-            // alert("Login Successful!");
-
-            
-            // localStorage.setItem("isLoggedIn", "true");
-
-            
-            // window.location.href = "/dashboard";
-            // window.location.href = "/login";
-
-        } else {
-
-            alert("Invalid Email or Password!");
+            console.error("Login Error:", error);
+            alert("Unable to connect to server.");
 
         }
 

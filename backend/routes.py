@@ -33,10 +33,11 @@ def interview():
     return render_template("interview.html")
 
 
+@main_bp.route("/mock-interview")
+def mock_interview():
+    return render_template("mock_interview.html")
+
+
 @main_bp.route("/result")
 def result():
     return render_template("result.html")
-
-
-
-

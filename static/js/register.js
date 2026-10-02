@@ -1,33 +1,33 @@
-// ===============================
-// AI Interview Coach - register.js
-// ===============================
-
 document.addEventListener("DOMContentLoaded", () => {
 
     const registerForm = document.getElementById("registerForm");
 
-    registerForm.addEventListener("submit", function (e) {
+    if (!registerForm) {
+        console.error("registerForm not found");
+        return;
+    }
+
+    registerForm.addEventListener("submit", async function (e) {
 
         e.preventDefault();
+
+        console.log("Register button clicked");
 
         const fullname = document.getElementById("fullname").value.trim();
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirmPassword").value;
 
-        // Check Empty Fields
-        if (fullname === "" || email === "" || password === "" || confirmPassword === "") {
+        if (!fullname || !email || !password || !confirmPassword) {
             alert("Please fill all fields.");
             return;
         }
 
-        // Name Validation
         if (fullname.length < 3) {
             alert("Name must contain at least 3 characters.");
             return;
         }
 
-        // Email Validation
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailPattern.test(email)) {
@@ -35,31 +35,55 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Password Length
         if (password.length < 6) {
             alert("Password must be at least 6 characters.");
             return;
         }
 
-        // Password Match
         if (password !== confirmPassword) {
             alert("Passwords do not match.");
             return;
         }
 
-        // Save User (Temporary)
-        const user = {
-            fullname: fullname,
-            email: email,
-            password: password
-        };
+        try {
 
-        localStorage.setItem("user", JSON.stringify(user));
+            console.log("Sending registration request...");
 
-        alert("Registration Successful!");
+            const response = await fetch("/api/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: fullname,
+                    email: email,
+                    password: password
+                })
+            });
 
-        // Redirect to Login Page
-        window.location.href = "/login";
+            const data = await response.json();
+
+            console.log("Server response:", data);
+
+            if (response.ok) {
+
+                alert(data.message);
+
+                window.location.href = "/login";
+
+            } else {
+
+                alert(data.message);
+
+            }
+
+        } catch (error) {
+
+            console.error("Registration Error:", error);
+
+            alert("Unable to connect to server.");
+
+        }
 
     });
 
