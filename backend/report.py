@@ -8,30 +8,42 @@ report_bp = Blueprint("report", __name__)
 def generate_report(user_id):
 
     conn = get_db_connection()
+
+    if not conn:
+        return jsonify({"message": "Database connection failed."}), 500
+
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute(
-        "SELECT question, answer FROM interview_answers WHERE user_id=%s", (user_id,)
-    )
+    try:
 
-    answers = cursor.fetchall()
+        cursor.execute(
+            """
+            SELECT question, answer
+            FROM interview_answers
+            WHERE user_id = %s
+            """,
+            (user_id,),
+        )
 
-    total_questions = len(answers)
+        answers = cursor.fetchall()
 
-    if total_questions == 0:
-        return jsonify({"message": "No interview found."}), 404
+        total_questions = len(answers)
 
-    score = total_questions * 10
+        if total_questions == 0:
+            return jsonify({"message": "No interview found."}), 404
 
-    report = {
-        "user_id": user_id,
-        "questions_answered": total_questions,
-        "score": score,
-        "status": "Completed",
-        "answers": answers,
-    }
+        return (
+            jsonify(
+                {
+                    "user_id": user_id,
+                    "questions_answered": total_questions,
+                    "answers": answers,
+                }
+            ),
+            200,
+        )
 
-    cursor.close()
-    conn.close()
+    finally:
 
-    return jsonify(report), 200
+        cursor.close()
+        conn.close()

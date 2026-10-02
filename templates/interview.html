@@ -1,41 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><link rel="stylesheet" href="static/style.css">
-<link rel="stylesheet" href="static/responsive.css">
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interview - AI Interview Coach</title>
+
+    <title>LYRA - AI Interview Coach</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/style.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+
+    <style>
+        body {
+            background: #f4f7fb;
+            font-family: Arial, sans-serif;
+            color: #172033;
+        }
+
+        .lyra-navbar {
+            background: linear-gradient(135deg, #1769ff, #6124f5);
+            padding: 22px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .lyra-logo {
+            font-size: 34px;
+            font-weight: 800;
+            margin: 0;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .lyra-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            margin-top: 2px;
+        }
+
+        .timer-box {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            padding: 10px 18px;
+            color: white;
+            text-align: center;
+        }
+
+        .timer-label {
+            font-size: 12px;
+            opacity: 0.85;
+        }
+
+        #timer {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffd43b;
+        }
+
+        .main-container {
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 18px;
+            border: none;
+            box-shadow: 0 8px 30px rgba(30, 50, 90, 0.09);
+            overflow: hidden;
+            margin-bottom: 28px;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #1769ff, #386df5);
+            color: white;
+            padding: 18px 25px;
+        }
+
+        .section-header h4 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .section-body {
+            padding: 28px;
+        }
+
+        .form-label {
+            font-weight: 700;
+            color: #263248;
+            margin-bottom: 9px;
+        }
+
+        .form-select {
+            height: 50px;
+            border-radius: 10px;
+            border: 1px solid #d9dfeb;
+            padding-left: 15px;
+        }
+
+        .form-select:focus {
+            border-color: #1769ff;
+            box-shadow: 0 0 0 3px rgba(23, 105, 255, 0.1);
+        }
+
+        #startBtn {
+            width: 100%;
+            height: 52px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1769ff, #4c38e8);
+            font-size: 17px;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(23, 105, 255, 0.25);
+            transition: 0.2s;
+        }
+
+        #startBtn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(23, 105, 255, 0.35);
+        }
+
+        .question-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        #questionNumber {
+            background: #eef3ff;
+            color: #1769ff;
+            border: 1px solid #d7e2ff;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .ai-badge {
+            color: #555;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .question-box {
+            background: #f7f9fd;
+            border-left: 5px solid #1769ff;
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 25px;
+        }
+
+        #question {
+            font-size: 20px;
+            line-height: 1.6;
+            font-weight: 600;
+            margin: 0;
+            color: #1b2538;
+        }
+
+        .answer-label {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        #answer {
+            min-height: 170px;
+            resize: vertical;
+            border: 1px solid #d9dfeb;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        #answer:focus {
+            border-color: #1769ff;
+            box-shadow: 0 0 0 3px rgba(23, 105, 255, 0.1);
+        }
+
+        #nextBtn {
+            min-width: 170px;
+            height: 48px;
+            border: none;
+            border-radius: 10px;
+            background: #168653;
+            font-weight: 700;
+            padding: 0 25px;
+        }
+
+        #nextBtn:hover {
+            background: #117344;
+        }
+
+        .interview-tip {
+            background: #fff8e1;
+            border: 1px solid #ffe69c;
+            color: #725b00;
+            border-radius: 10px;
+            padding: 13px 16px;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        .footer-text {
+            text-align: center;
+            color: #8a94a6;
+            font-size: 13px;
+            margin-top: 35px;
+        }
+
+        @media (max-width: 768px) {
+
+            .lyra-navbar {
+                padding: 18px;
+            }
+
+            .lyra-logo {
+                font-size: 28px;
+            }
+
+            .timer-box {
+                margin-top: 12px;
+            }
+
+            .main-container {
+                margin: 20px 12px;
+            }
+
+            .section-body {
+                padding: 20px;
+            }
+
+            #question {
+                font-size: 17px;
+            }
+
+            .question-top {
+                align-items: flex-start;
+                gap: 10px;
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-light">
 
-<!-- Navbar -->
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="#"><h1><b>LYRA</b></h1>AI Interview Coach</a>
-       
+<body>
 
-        <span class="text-white">
-            Time Left:
-            <span id="timer" class="fw-bold text-warning">15:00</span>
-        </span>
-    </div>
-</nav>
+    <nav class="lyra-navbar">
 
-<div class="container mt-5">
+        <div class="container">
 
-    Interview Details
-    <div class="card shadow mb-4">
-        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
 
-            <div class="row">
+                <div>
+                    <h1 class="lyra-logo">LYRA</h1>
+                    <div class="lyra-subtitle">
+                        AI Interview Coach
+                    </div>
+                </div>
 
-                <div class="col-md-4">
-                    <h5>Job role</h5>
-                        <select id="role">
+                <div class="timer-box">
+
+                    <div class="timer-label">
+                        TIME REMAINING
+                    </div>
+
+                    <div id="timer">
+                        15:00
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container main-container">
+
+
+        <!-- Interview Configuration -->
+
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <h4>
+                    Interview Details
+                </h4>
+
+            </div>
+
+
+            <div class="section-body">
+
+                <div class="row g-4">
+
+
+                    <div class="col-md-4">
+
+                        <label for="role" class="form-label">
+                            Job Role
+                        </label>
+
+                        <select id="role" class="form-select">
+
                             <option>Python Developer</option>
                             <option>Java Developer</option>
                             <option>Frontend Developer</option>
@@ -46,74 +322,145 @@
                             <option>AI / ML Engineer</option>
                             <option>SQL Developer</option>
                             <option>HR Interview</option>
+
                         </select>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <label for="difficulty" class="form-label">
+                            Difficulty Level
+                        </label>
+
+                        <select id="difficulty" class="form-select">
+
+                            <option>Easy</option>
+                            <option>Medium</option>
+                            <option>Hard</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <label for="questions" class="form-label">
+                            Number of Questions
+                        </label>
+
+                        <select id="questions" class="form-select">
+
+                            <option>5</option>
+                            <option selected>10</option>
+                            <option>15</option>
+
+                        </select>
+
+                    </div>
+
                 </div>
 
-                <div class="col-md-4">
-                    <h5>Difficulty Lavel</h5>
-                    <select id="difficulty">
-                        <option>Easy</option>
-                        <option>Medium</option>
-                        <option>Hard</option>
-                    </select>
-                </div>
-
-                <div class="col-md-4">
-                    <h5>Question</h5>
-                    <select id="questions">
-                        <option>5</option>
-                        <option selected>10</option>
-                        <option>15</option>
-                    </select>
-                </div>
-            
             </div>
 
         </div>
-       
-    </div>
 
-    <div class="d-flex justify-content-centre mt-3">
-        <button id="startBtn" class="btn btn-primary px-5">
-            Start Interview
-        </button>
-    </div>
-</br>
-</br>
 
-    
-<div class="card shadow mt-4">
+        <!-- Start Interview -->
 
-    <div class="card-header bg-primary text-white">
+        <div class="mb-4">
 
-        <h4>Interview Question</h4>
+            <button id="startBtn" class="btn btn-primary">
+                Start Interview
+            </button>
 
-    </div>
+        </div>
 
-    <div class="card-body">
 
-        <h5 id="question">
+        <!-- Question -->
 
-            Click "Start Interview" to generate AI questions.
+        <div class="section-card">
 
-        </h5>
+            <div class="section-header">
 
-        <br>
+                <h4>
+                    Interview Question
+                </h4>
 
-        <textarea id="answer" class="form-control" rows="6" placeholder="Write your answer here..."></textarea>
+            </div>
 
-        <br>
 
-        <button id="nextBtn" class="btn btn-success">
+            <div class="section-body">
 
-            Next Question
 
-        </button>
+                <div class="question-top">
 
-    </div>
+                    <span id="questionNumber">
+                        Question 0
+                    </span>
 
-</div>
+                    <span class="ai-badge">
+                        🤖 AI Generated
+                    </span>
 
-<script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+                </div>
+
+
+                <div class="question-box">
+
+                    <h5 id="question">
+
+                        Click "Start Interview" to generate AI questions.
+
+                    </h5>
+
+                </div>
+
+
+                <label for="answer" class="answer-label">
+                    Your Answer
+                </label>
+
+
+                <textarea id="answer" class="form-control" rows="7" placeholder="Write your answer here..."
+                    disabled></textarea>
+
+
+                <div class="interview-tip">
+
+                    💡 <strong>Tip:</strong>
+                    Explain your answer clearly and include an example when possible.
+
+                </div>
+
+
+                <div class="d-flex justify-content-end mt-4">
+
+                    <button id="nextBtn" class="btn btn-success" style="display: none;">
+                        Next Question
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-text">
+
+            LYRA • AI Interview Coach
+
+        </div>
+
+
+    </main>
+
+
     <script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+
 </body>
+
+</html>

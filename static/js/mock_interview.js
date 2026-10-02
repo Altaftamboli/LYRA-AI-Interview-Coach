@@ -1,10 +1,18 @@
 // ==========================================
-// LYRA MOCK INTERVIEW FRONTEND
+// LYRA AI MOCK INTERVIEW
 // ==========================================
 
 let questions = [];
-let currentQuestion = 0;
 let answers = [];
+let evaluations = [];
+
+let currentQuestion = 0;
+let selectedRole = "";
+let selectedDifficulty = "";
+let questionCount = 0;
+
+let recognition = null;
+let isListening = false;
 
 
 // ==========================================
@@ -47,88 +55,344 @@ const setupLoading =
 const questionLoading =
     document.getElementById("questionLoading");
 
+const evaluationBox =
+    document.getElementById("evaluationBox");
+
+const evaluationContent =
+    document.getElementById("evaluationContent");
+
+const evaluationScore =
+    document.getElementById("evaluationScore");
+
+const startSpeakingBtn =
+    document.getElementById("startSpeakingBtn");
+
+const stopSpeakingBtn =
+    document.getElementById("stopSpeakingBtn");
+
+const listeningStatus =
+    document.getElementById("listeningStatus");
+
+
+// ==========================================
+// SPEECH RECOGNITION
+// ==========================================
+
+const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+if (SpeechRecognition) {
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+
+    recognition.onstart = function () {
+
+        isListening = true;
+
+        startSpeakingBtn.disabled = true;
+        stopSpeakingBtn.disabled = false;
+
+        listeningStatus.innerText =
+            "🔴 Listening... Speak your answer.";
+
+        listeningStatus.classList.add(
+            "lyra-mock-listening"
+        );
+    };
+
+
+    recognition.onresult = function (event) {
+
+        let finalTranscript = "";
+
+        for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ) {
+
+            if (
+                event.results[i].isFinal
+            ) {
+
+                finalTranscript +=
+                    event.results[i][0].transcript;
+            }
+        }
+
+
+        if (
+            finalTranscript.trim()
+        ) {
+
+            const existing =
+                answerBox.value.trim();
+
+
+            answerBox.value =
+                existing
+                    ? existing +
+                      " " +
+                      finalTranscript.trim()
+                    : finalTranscript.trim();
+        }
+    };
+
+
+    recognition.onerror = function (event) {
+
+        console.error(
+            "Speech Recognition Error:",
+            event.error
+        );
+
+
+        isListening = false;
+
+        startSpeakingBtn.disabled = false;
+        stopSpeakingBtn.disabled = true;
+
+        listeningStatus.innerText =
+            "⚠️ Microphone error: " +
+            event.error;
+
+        listeningStatus.classList.remove(
+            "lyra-mock-listening"
+        );
+    };
+
+
+    recognition.onend = function () {
+
+        isListening = false;
+
+        startSpeakingBtn.disabled = false;
+        stopSpeakingBtn.disabled = true;
+
+        listeningStatus.classList.remove(
+            "lyra-mock-listening"
+        );
+
+
+        if (
+            listeningStatus.innerText.includes(
+                "Listening"
+            )
+        ) {
+
+            listeningStatus.innerText =
+                "🎙 Microphone is off";
+        }
+    };
+
+} else {
+
+    startSpeakingBtn.disabled = true;
+
+    listeningStatus.innerText =
+        "Speech recognition is not supported in this browser.";
+
+}
+
+
+// ==========================================
+// START SPEAKING
+// ==========================================
+
+startSpeakingBtn.addEventListener(
+    "click",
+    function () {
+
+        if (!recognition) {
+
+            alert(
+                "Speech recognition is not supported. Please use Google Chrome or Microsoft Edge."
+            );
+
+            return;
+        }
+
+
+        try {
+
+            recognition.start();
+
+        } catch (error) {
+
+            console.log(
+                "Speech recognition is already running."
+            );
+        }
+
+    }
+);
+
+
+// ==========================================
+// STOP SPEAKING
+// ==========================================
+
+stopSpeakingBtn.addEventListener(
+    "click",
+    function () {
+
+        if (
+            recognition &&
+            isListening
+        ) {
+
+            recognition.stop();
+        }
+
+    }
+);
+
 
 // ==========================================
 // START MOCK INTERVIEW
 // ==========================================
 
-startMockBtn.addEventListener("click", function () {
+startMockBtn.addEventListener(
+    "click",
+    async function () {
 
-    const role =
-        document.getElementById("role").value;
-
-    const difficulty =
-        document.getElementById("difficulty").value;
-
-    const questionCount =
-        parseInt(
-            document.getElementById("questionCount").value
-        );
+        selectedRole =
+            document.getElementById(
+                "role"
+            ).value;
 
 
-    // Demo questions for frontend testing
-    questions = generateDemoQuestions(
-        role,
-        difficulty,
-        questionCount
-    );
-
-    answers = [];
-
-    currentQuestion = 0;
+        selectedDifficulty =
+            document.getElementById(
+                "difficulty"
+            ).value;
 
 
-    setupSection.style.display = "none";
-
-    interviewSection.style.display = "block";
-
-    reportSection.style.display = "none";
-
-
-    showQuestion();
-
-});
+        questionCount =
+            parseInt(
+                document.getElementById(
+                    "questionCount"
+                ).value
+            );
 
 
-// ==========================================
-// DEMO QUESTIONS
-// ==========================================
+        startMockBtn.disabled = true;
 
-function generateDemoQuestions(
-    role,
-    difficulty,
-    count
-) {
+        setupLoading.style.display =
+            "block";
 
-    const demoQuestions = [
 
-        `What are the most important skills required for a ${role}?`,
+        try {
 
-        `Explain one important concept related to ${role}.`,
+            const response =
+                await fetch(
+                    "/api/mock-interview/start",
+                    {
+                        method: "POST",
 
-        `How would you approach solving a difficult technical problem as a ${role}?`,
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
 
-        `Describe a project that would demonstrate your skills as a ${role}.`,
+                        credentials:
+                            "same-origin",
 
-        `How do you debug a problem in your code?`,
+                        body:
+                            JSON.stringify({
 
-        `How do you keep your technical knowledge up to date?`,
+                                role:
+                                    selectedRole,
 
-        `Describe a challenging programming problem you have solved.`,
+                                difficulty:
+                                    selectedDifficulty,
 
-        `What is your approach to writing clean and maintainable code?`,
+                                questions:
+                                    questionCount
 
-        `How would you optimize the performance of an application?`,
+                            })
+                    }
+                );
 
-        `Why do you think you are suitable for this ${role} position?`
 
-    ];
+            const data =
+                await response.json();
 
-    return demoQuestions.slice(
-        0,
-        Math.min(count, demoQuestions.length)
-    );
-}
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to start interview."
+                );
+            }
+
+
+            questions =
+                data.questions || [];
+
+
+            if (
+                questions.length === 0
+            ) {
+
+                throw new Error(
+                    "AI did not generate questions."
+                );
+            }
+
+
+            answers = [];
+            evaluations = [];
+            currentQuestion = 0;
+
+
+            setupSection.style.display =
+                "none";
+
+            interviewSection.style.display =
+                "block";
+
+            reportSection.style.display =
+                "none";
+
+
+            showQuestion();
+
+        } catch (error) {
+
+            console.error(
+                "Start Interview Error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Failed to start interview."
+            );
+
+            startMockBtn.disabled =
+                false;
+
+        } finally {
+
+            setupLoading.style.display =
+                "none";
+        }
+
+    }
+);
 
 
 // ==========================================
@@ -138,7 +402,8 @@ function generateDemoQuestions(
 function showQuestion() {
 
     if (
-        currentQuestion >= questions.length
+        currentQuestion >=
+        questions.length
     ) {
 
         finishInterview();
@@ -147,22 +412,22 @@ function showQuestion() {
     }
 
 
-    const question =
+    questionText.innerText =
         questions[currentQuestion];
 
 
-    questionText.innerText =
-        question;
-
-
     progressText.innerText =
-        `Question ${currentQuestion + 1} of ${questions.length}`;
+        `Question ${
+            currentQuestion + 1
+        } of ${
+            questions.length
+        }`;
 
 
     const progress =
         (
-            (currentQuestion + 1)
-            / questions.length
+            (currentQuestion + 1) /
+            questions.length
         ) * 100;
 
 
@@ -170,31 +435,53 @@ function showQuestion() {
         `${progress}%`;
 
 
-    lyraMessage.innerText =
+    if (
         currentQuestion === 0
+    ) {
 
-            ? "Welcome! Let's begin your mock interview. Please answer the question below."
+        lyraMessage.innerText =
+            "Welcome! Let's begin your mock interview. Answer using your microphone or type your response.";
 
-            : "Good. Let's move to the next question.";
+    } else {
 
+        lyraMessage.innerText =
+            "Good. Let's continue with the next question.";
+    }
 
-    // IMPORTANT:
-    // Clear previous answer
 
     answerBox.value = "";
 
+    answerBox.disabled = false;
 
-    answerBox.focus();
-
-
-    // Hide old evaluation
-
-    const evaluationBox =
-        document.getElementById("evaluationBox");
 
     evaluationBox.style.display =
         "none";
 
+
+    evaluationContent.innerHTML =
+        "";
+
+
+    nextBtn.disabled = false;
+
+
+    if (
+        currentQuestion ===
+        questions.length - 1
+    ) {
+
+        nextBtn.innerText =
+            "Finish Interview →";
+
+    } else {
+
+        nextBtn.innerText =
+            "Next Question →";
+    }
+
+
+    listeningStatus.innerText =
+        "🎙 Microphone is off";
 }
 
 
@@ -204,16 +491,16 @@ function showQuestion() {
 
 nextBtn.addEventListener(
     "click",
-    function () {
+    async function () {
 
         const answer =
             answerBox.value.trim();
 
 
-        if (answer === "") {
+        if (!answer) {
 
             alert(
-                "Please write your answer before continuing."
+                "Please answer the question before continuing."
             );
 
             answerBox.focus();
@@ -222,31 +509,264 @@ nextBtn.addEventListener(
         }
 
 
-        // Save answer
+        if (
+            recognition &&
+            isListening
+        ) {
 
-        answers.push({
-            question:
-                questions[currentQuestion],
-
-            answer:
-                answer
-        });
+            recognition.stop();
+        }
 
 
-        currentQuestion++;
+        nextBtn.disabled = true;
+
+        answerBox.disabled = true;
+
+        questionLoading.style.display =
+            "block";
 
 
-        showQuestion();
+        try {
+
+            answers[currentQuestion] = {
+
+                question:
+                    questions[currentQuestion],
+
+                answer:
+                    answer
+
+            };
+
+
+            const response =
+                await fetch(
+                    "/api/mock-interview/evaluate-answer",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        credentials:
+                            "same-origin",
+
+                        body:
+                            JSON.stringify({
+
+                                role:
+                                    selectedRole,
+
+                                difficulty:
+                                    selectedDifficulty,
+
+                                question:
+                                    questions[currentQuestion],
+
+                                answer:
+                                    answer
+
+                            })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data.message ||
+                    "AI evaluation failed."
+                );
+            }
+
+
+            evaluations[currentQuestion] =
+                data.evaluation;
+
+
+            showEvaluation(
+                data.evaluation
+            );
+
+
+            await delay(1800);
+
+
+            currentQuestion++;
+
+
+            if (
+                currentQuestion >=
+                questions.length
+            ) {
+
+                await finishInterview();
+
+                return;
+            }
+
+
+            showQuestion();
+
+        } catch (error) {
+
+            console.error(
+                "Evaluation Error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Unable to analyze your answer."
+            );
+
+            nextBtn.disabled =
+                false;
+
+            answerBox.disabled =
+                false;
+
+        } finally {
+
+            questionLoading.style.display =
+                "none";
+        }
 
     }
 );
 
 
 // ==========================================
+// SHOW EVALUATION
+// ==========================================
+
+function showEvaluation(
+    evaluation
+) {
+
+    evaluationBox.style.display =
+        "block";
+
+
+    const score =
+        Number(
+            evaluation.score || 0
+        );
+
+
+    evaluationScore.innerText =
+        `${score}%`;
+
+
+    evaluationContent.innerHTML = `
+
+        <div class="lyra-mock-metrics">
+
+            <div class="lyra-mock-metric">
+                <small>Technical</small>
+                <strong>
+                    ${
+                        evaluation
+                            .technical_correctness || 0
+                    }%
+                </strong>
+            </div>
+
+
+            <div class="lyra-mock-metric">
+                <small>Relevance</small>
+                <strong>
+                    ${
+                        evaluation
+                            .relevance || 0
+                    }%
+                </strong>
+            </div>
+
+
+            <div class="lyra-mock-metric">
+                <small>Completeness</small>
+                <strong>
+                    ${
+                        evaluation
+                            .completeness || 0
+                    }%
+                </strong>
+            </div>
+
+
+            <div class="lyra-mock-metric">
+                <small>Clarity</small>
+                <strong>
+                    ${
+                        evaluation
+                            .clarity || 0
+                    }%
+                </strong>
+            </div>
+
+        </div>
+
+
+        <div class="lyra-mock-feedback">
+
+            <strong>
+                💬 AI Feedback
+            </strong>
+
+            <p>
+                ${
+                    escapeHtml(
+                        evaluation.feedback || ""
+                    )
+                }
+            </p>
+
+        </div>
+
+
+        <div class="lyra-mock-feedback">
+
+            <strong>
+                💡 How to Improve
+            </strong>
+
+            <p>
+                ${
+                    escapeHtml(
+                        evaluation.improvement || ""
+                    )
+                }
+            </p>
+
+        </div>
+    `;
+}
+
+
+// ==========================================
 // FINISH INTERVIEW
 // ==========================================
 
-function finishInterview() {
+async function finishInterview() {
+
+    if (
+        recognition &&
+        isListening
+    ) {
+
+        recognition.stop();
+    }
+
 
     interviewSection.style.display =
         "none";
@@ -255,25 +775,92 @@ function finishInterview() {
         "block";
 
 
-    generateDemoReport();
+    try {
 
+        const response =
+            await fetch(
+                "/api/mock-interview/final-report",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    credentials:
+                        "same-origin",
+
+                    body:
+                        JSON.stringify({
+
+                            role:
+                                selectedRole,
+
+                            difficulty:
+                                selectedDifficulty,
+
+                            questions:
+                                questions,
+
+                            answers:
+                                answers,
+
+                            evaluations:
+                                evaluations
+
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Unable to generate report."
+            );
+        }
+
+
+        displayFinalReport(
+            data.report
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Final Report Error:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Failed to generate final report."
+        );
+    }
 }
 
 
 // ==========================================
-// DEMO REPORT
+// FINAL REPORT
 // ==========================================
 
-function generateDemoReport() {
-
-    const score =
-        calculateDemoScore();
-
+function displayFinalReport(
+    report
+) {
 
     document.getElementById(
         "overallScore"
     ).innerText =
-        `${score}%`;
+        `${report.score || 0}%`;
 
 
     const strengthsList =
@@ -299,95 +886,48 @@ function generateDemoReport() {
     suggestionsList.innerHTML = "";
 
 
-    addListItem(
-        strengthsList,
-        "Clear communication"
-    );
+    (report.strengths || [])
+        .forEach(
+            function (item) {
 
-    addListItem(
-        strengthsList,
-        "Good understanding of technical concepts"
-    );
+                addListItem(
+                    strengthsList,
+                    item
+                );
 
-    addListItem(
-        strengthsList,
-        "Willingness to explain your approach"
-    );
+            }
+        );
 
 
-    addListItem(
-        weaknessesList,
-        "Some answers could include more technical details"
-    );
+    (report.weaknesses || [])
+        .forEach(
+            function (item) {
 
-    addListItem(
-        weaknessesList,
-        "Improve problem-solving explanations"
-    );
+                addListItem(
+                    weaknessesList,
+                    item
+                );
+
+            }
+        );
 
 
-    addListItem(
-        suggestionsList,
-        "Practice technical interview questions regularly"
-    );
+    (report.suggestions || [])
+        .forEach(
+            function (item) {
 
-    addListItem(
-        suggestionsList,
-        "Explain your reasoning step by step"
-    );
+                addListItem(
+                    suggestionsList,
+                    item
+                );
 
-    addListItem(
-        suggestionsList,
-        "Work on real-world projects"
-    );
-
+            }
+        );
 }
 
 
 // ==========================================
-// DEMO SCORE
-// ==========================================
-
-function calculateDemoScore() {
-
-    if (answers.length === 0) {
-        return 0;
-    }
-
-
-    let totalLength = 0;
-
-
-    answers.forEach(function (item) {
-
-        totalLength +=
-            item.answer.length;
-
-    });
-
-
-    const average =
-        totalLength / answers.length;
-
-
-    if (average > 200) {
-        return 90;
-    }
-
-    if (average > 100) {
-        return 80;
-    }
-
-    if (average > 50) {
-        return 70;
-    }
-
-    return 60;
-}
-
-
-// ==========================================
-// LIST ITEM
+// HELPERS
 // ==========================================
 
 function addListItem(
@@ -402,4 +942,35 @@ function addListItem(
         text;
 
     list.appendChild(li);
+}
+
+
+function escapeHtml(
+    text
+) {
+
+    const div =
+        document.createElement("div");
+
+    div.innerText =
+        text || "";
+
+    return div.innerHTML;
+}
+
+
+function delay(
+    milliseconds
+) {
+
+    return new Promise(
+        function (resolve) {
+
+            setTimeout(
+                resolve,
+                milliseconds
+            );
+
+        }
+    );
 }

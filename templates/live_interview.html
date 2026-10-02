@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LYRA - Live Interview</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/live_interview.css') }}">
+</head>
+
+<body>
+
+    <header class="live-navbar">
+
+        <div class="live-brand">
+            <span class="live-brand-icon">✦</span>
+            <span>LYRA</span>
+            <small>AI INTERVIEW COACH</small>
+        </div>
+
+        <a href="/dashboard" class="dashboard-btn">
+            Dashboard
+        </a>
+
+    </header>
+
+
+    <main class="live-container">
+
+        <section class="live-header">
+
+            <div class="live-badge">
+                ● LIVE INTERVIEW
+            </div>
+
+            <h1>
+                AI-Powered Live Interview
+            </h1>
+
+            <p>
+                Practice a real interview with LYRA using your camera,
+                microphone and AI-powered feedback.
+            </p>
+
+        </section>
+
+
+        <!-- SETUP -->
+
+        <section id="setupSection" class="live-card">
+
+            <h2>Start Your Interview</h2>
+
+            <div class="form-group">
+
+                <label for="role">
+                    Job Role
+                </label>
+
+                <select id="role">
+                    <option value="Python Developer">
+                        Python Developer
+                    </option>
+
+                    <option value="Web Developer">
+                        Web Developer
+                    </option>
+
+                    <option value="Software Developer">
+                        Software Developer
+                    </option>
+
+                    <option value="Data Analyst">
+                        Data Analyst
+                    </option>
+
+                    <option value="AI/ML Engineer">
+                        AI/ML Engineer
+                    </option>
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="difficulty">
+                    Difficulty
+                </label>
+
+                <select id="difficulty">
+
+                    <option value="Easy">
+                        Easy
+                    </option>
+
+                    <option value="Medium" selected>
+                        Medium
+                    </option>
+
+                    <option value="Hard">
+                        Hard
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="questionCount">
+                    Number of Questions
+                </label>
+
+                <select id="questionCount">
+
+                    <option value="3">
+                        3 Questions
+                    </option>
+
+                    <option value="5" selected>
+                        5 Questions
+                    </option>
+
+                    <option value="10">
+                        10 Questions
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button id="startLiveBtn" class="start-live-btn">
+                🎥 Start Live Interview
+            </button>
+
+            <p id="setupStatus" class="setup-status"></p>
+
+        </section>
+
+
+        <!-- LIVE INTERVIEW -->
+
+        <section id="interviewSection" class="live-interview-section" style="display:none;">
+
+            <div class="interview-topbar">
+
+                <div>
+                    <span class="live-indicator">
+                        ● LIVE
+                    </span>
+
+                    <span id="progressText">
+                        Question 1 of 5
+                    </span>
+                </div>
+
+                <div id="timer">
+                    15:00
+                </div>
+
+            </div>
+
+
+            <div class="interview-grid">
+
+                <!-- CAMERA -->
+
+                <div class="camera-card">
+
+                    <div class="camera-header">
+                        <span>Camera</span>
+
+                        <span id="cameraStatus">
+                            Checking...
+                        </span>
+                    </div>
+
+                    <div class="camera-container">
+
+                        <video id="camera" autoplay muted playsinline>
+                        </video>
+
+                        <canvas id="faceCanvas">
+                        </canvas>
+
+                        <div id="cameraWarning" class="camera-warning" style="display:none;">
+                            ⚠️ Please keep your face toward the camera.
+                        </div>
+
+                    </div>
+
+                    <div class="camera-info">
+
+                        <span id="faceStatus">
+                            Face detection starting...
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AI INTERVIEWER -->
+
+                <div class="interviewer-card">
+
+                    <div class="ai-header">
+
+                        <div class="ai-avatar">
+                            ✦
+                        </div>
+
+                        <div>
+                            <strong>LYRA</strong>
+                            <span>AI Interviewer</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="question-area">
+
+                        <div class="question-label">
+                            LYRA'S QUESTION
+                        </div>
+
+                        <h2 id="questionText">
+                            Waiting for interview...
+                        </h2>
+
+                    </div>
+
+
+                    <div class="voice-status" id="voiceStatus">
+
+                        🔊 LYRA is preparing...
+
+                    </div>
+
+
+                    <!-- ANSWER -->
+
+                    <div class="answer-area">
+
+                        <label for="answer">
+                            Your Answer
+                        </label>
+
+                        <textarea id="answer" placeholder="Your spoken answer will appear here..." rows="6">
+                    </textarea>
+
+                    </div>
+
+
+                    <div class="speech-controls">
+
+                        <button id="startSpeakingBtn" class="speech-btn">
+
+                            🎤 Start Speaking
+
+                        </button>
+
+                        <button id="stopSpeakingBtn" class="speech-btn stop-btn" disabled>
+
+                            ⏹ Stop
+
+                        </button>
+
+                    </div>
+
+
+                    <div id="listeningStatus" class="listening-status">
+
+                        Microphone ready
+
+                    </div>
+
+
+                    <div id="evaluationBox" class="evaluation-box" style="display:none;">
+
+                        <div class="evaluation-score">
+
+                            <span>Answer Score</span>
+
+                            <strong id="evaluationScore">
+                                0
+                            </strong>
+
+                        </div>
+
+                        <div id="evaluationContent"></div>
+
+                    </div>
+
+
+                    <button id="nextBtn" class="next-btn" style="display:none;">
+
+                        Next Question →
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div id="questionLoading" class="question-loading" style="display:none;">
+
+                🤖 LYRA is thinking...
+
+            </div>
+
+        </section>
+
+
+        <!-- FINAL REPORT -->
+
+        <section id="reportSection" class="live-card report-section" style="display:none;">
+
+            <div class="report-icon">
+                ✓
+            </div>
+
+            <h2>
+                Interview Completed
+            </h2>
+
+            <p>
+                LYRA has analyzed your interview performance.
+            </p>
+
+
+            <div class="overall-score">
+
+                <span>Overall Score</span>
+
+                <strong id="overallScore">
+                    0
+                </strong>
+
+                <small>/ 100</small>
+
+            </div>
+
+
+            <div class="report-grid">
+
+                <div class="report-box">
+
+                    <h3>💪 Strengths</h3>
+
+                    <ul id="strengthsList"></ul>
+
+                </div>
+
+
+                <div class="report-box">
+
+                    <h3>⚠️ Areas to Improve</h3>
+
+                    <ul id="weaknessesList"></ul>
+
+                </div>
+
+
+                <div class="report-box">
+
+                    <h3>💡 Suggestions</h3>
+
+                    <ul id="suggestionsList"></ul>
+
+                </div>
+
+            </div>
+
+
+            <button class="dashboard-btn" onclick="window.location.href='/dashboard'">
+
+                Back to Dashboard
+
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <script src="{{ url_for('static', filename='js/live_interview.js') }}?v=1"></script>
+
+</body>
+
+</html>

@@ -1,407 +1,1384 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
-<!-- <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>LYRA - Mock Interview</title> -->
-
-    <!-- Bootstrap -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-
-    <!-- Existing CSS -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> -->
-
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}"> -->
-
-    <!-- Mock Interview CSS -->
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/mock_interview.css') }}"> -->
-<!-- </head> -->
- 
-
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>LYRA - Mock Interview</title>
+    <title>LYRA - AI Mock Interview</title>
+
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Main CSS -->
+
+    <!-- Existing project CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <!-- Responsive CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
 
-    <!-- Mock Interview CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mock_interview.css') }}">
+
+    <!-- ========================================= -->
+    <!-- LYRA MOCK INTERVIEW CSS -->
+    <!-- ========================================= -->
+
+    <style>
+        /* =========================================
+           RESET / PAGE
+        ========================================= */
+
+        .lyra-mock-page {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background:
+                radial-gradient(circle at 10% 10%,
+                    rgba(99, 102, 241, 0.10),
+                    transparent 30%),
+                radial-gradient(circle at 90% 80%,
+                    rgba(6, 182, 212, 0.10),
+                    transparent 30%),
+                #f5f7fb;
+            color: #172033;
+        }
+
+
+        .lyra-mock-page *,
+        .lyra-mock-page *::before,
+        .lyra-mock-page *::after {
+            box-sizing: border-box;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .lyra-mock-navbar {
+            width: 100%;
+            min-height: 78px;
+            background: #111827;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+        }
+
+
+        .lyra-mock-navbar-inner {
+            width: min(1150px, 94%);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+
+        .lyra-mock-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            min-width: 0;
+        }
+
+
+        .lyra-mock-logo {
+            width: 145px;
+            height: 58px;
+            object-fit: contain;
+            object-position: left center;
+            display: block;
+        }
+
+
+        .lyra-mock-dashboard-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 9px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            background: transparent;
+            transition: 0.2s ease;
+        }
+
+
+        .lyra-mock-dashboard-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.10);
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================================
+           MAIN WRAPPER
+        ========================================= */
+
+        .lyra-mock-wrapper {
+            width: min(1060px, 94%);
+            margin: 0 auto;
+            padding: 45px 0 70px;
+        }
+
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .lyra-mock-hero {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+
+        .lyra-mock-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 30px;
+            background: #eef2ff;
+            color: #4f46e5;
+            font-size: 14px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+
+        .lyra-mock-hero-title {
+            margin: 0 0 12px;
+            font-size: clamp(32px, 5vw, 50px);
+            line-height: 1.1;
+            font-weight: 900;
+            letter-spacing: -1px;
+            background:
+                linear-gradient(90deg,
+                    #4f46e5,
+                    #0891b2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        .lyra-mock-hero-description {
+            max-width: 700px;
+            margin: 0 auto;
+            color: #64748b;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           MAIN CARD
+        ========================================= */
+
+        .lyra-mock-card {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.97);
+            border: 1px solid #e5e7eb;
+            border-radius: 24px;
+            padding: 34px;
+            box-shadow:
+                0 25px 70px rgba(15, 23, 42, 0.08);
+        }
+
+
+        /* =========================================
+           SETUP
+        ========================================= */
+
+        .lyra-mock-setup {
+            display: block;
+        }
+
+
+        .lyra-mock-section-heading {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+
+        .lyra-mock-section-heading h2 {
+            margin: 0 0 8px;
+            font-size: 30px;
+            font-weight: 850;
+            color: #172033;
+        }
+
+
+        .lyra-mock-section-heading p {
+            margin: 0;
+            color: #64748b;
+        }
+
+
+        .lyra-mock-setup-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+
+        .lyra-mock-field label {
+            display: block;
+            margin-bottom: 8px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+
+        .lyra-mock-field select {
+            width: 100%;
+            height: 52px;
+            padding: 0 14px;
+            border: 1px solid #dbe1ea;
+            border-radius: 13px;
+            background: white;
+            color: #172033;
+            font-size: 15px;
+            outline: none;
+            box-shadow: none;
+        }
+
+
+        .lyra-mock-field select:focus {
+            border-color: #6366f1;
+            box-shadow:
+                0 0 0 4px rgba(99, 102, 241, 0.10);
+        }
+
+
+        .lyra-mock-start-btn {
+            width: 100%;
+            height: 56px;
+            margin-top: 24px;
+            border: 0;
+            border-radius: 14px;
+            background:
+                linear-gradient(135deg,
+                    #4f46e5,
+                    #0891b2);
+            color: white;
+            font-size: 16px;
+            font-weight: 850;
+            cursor: pointer;
+            box-shadow:
+                0 12px 30px rgba(79, 70, 229, 0.25);
+            transition: 0.2s ease;
+        }
+
+
+        .lyra-mock-start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 17px 35px rgba(79, 70, 229, 0.30);
+        }
+
+
+        .lyra-mock-start-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+
+        .lyra-mock-loading {
+            display: none;
+            text-align: center;
+            padding: 25px 0 5px;
+        }
+
+
+        .lyra-mock-spinner {
+            width: 32px;
+            height: 32px;
+            border: 4px solid #e0e7ff;
+            border-top-color: #4f46e5;
+            border-radius: 50%;
+            animation:
+                lyraMockSpin 0.8s linear infinite;
+            margin: auto;
+        }
+
+
+        @keyframes lyraMockSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* =========================================
+           INTERVIEW
+        ========================================= */
+
+        .lyra-mock-interview {
+            display: none;
+        }
+
+
+        .lyra-mock-top {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+
+        .lyra-mock-active-pill {
+            flex-shrink: 0;
+            padding: 9px 14px;
+            border-radius: 30px;
+            background: #ecfdf5;
+            color: #047857;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+
+        .lyra-mock-progress-wrapper {
+            flex: 1;
+        }
+
+
+        .lyra-mock-progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+
+        .lyra-mock-progress {
+            width: 100%;
+            height: 9px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #e8edf4;
+        }
+
+
+        .lyra-mock-progress-fill {
+            width: 0%;
+            height: 100%;
+            border-radius: 20px;
+            background:
+                linear-gradient(90deg,
+                    #4f46e5,
+                    #06b6d4);
+            transition: width 0.4s ease;
+        }
+
+
+        /* =========================================
+           AI MESSAGE
+        ========================================= */
+
+        .lyra-mock-ai-message {
+            display: flex;
+            gap: 15px;
+            padding: 19px;
+            margin-bottom: 22px;
+            border: 1px solid #dbeafe;
+            border-radius: 18px;
+            background:
+                linear-gradient(135deg,
+                    #eef2ff,
+                    #ecfeff);
+        }
+
+
+        .lyra-mock-avatar {
+            flex: 0 0 48px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            background:
+                linear-gradient(135deg,
+                    #4f46e5,
+                    #0891b2);
+            color: white;
+            font-weight: 900;
+            font-size: 20px;
+        }
+
+
+        .lyra-mock-ai-message strong {
+            color: #312e81;
+        }
+
+
+        .lyra-mock-ai-message p {
+            margin: 4px 0 0;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+
+        /* =========================================
+           QUESTION
+        ========================================= */
+
+        .lyra-mock-question {
+            position: relative;
+            overflow: hidden;
+            padding: 26px;
+            margin-bottom: 24px;
+            border-radius: 18px;
+            background: #0f172a;
+            color: white;
+        }
+
+
+        .lyra-mock-question::after {
+            content: "";
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            top: -100px;
+            right: -80px;
+            border-radius: 50%;
+            background:
+                rgba(99, 102, 241, 0.20);
+        }
+
+
+        .lyra-mock-question-label {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 9px;
+            color: #a5b4fc;
+            font-size: 12px;
+            font-weight: 850;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+
+        .lyra-mock-question-text {
+            position: relative;
+            z-index: 2;
+            margin: 0;
+            font-size: 22px;
+            line-height: 1.5;
+            font-weight: 750;
+        }
+
+
+        /* =========================================
+           ANSWER
+        ========================================= */
+
+        .lyra-mock-answer-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 9px;
+        }
+
+
+        .lyra-mock-answer-heading strong {
+            font-size: 17px;
+        }
+
+
+        .lyra-mock-answer-hint {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+
+        .lyra-mock-answer-box {
+            width: 100%;
+            min-height: 170px;
+            padding: 17px;
+            resize: vertical;
+            border: 1px solid #dbe1ea;
+            border-radius: 15px;
+            outline: none;
+            background: white;
+            color: #172033;
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+
+        .lyra-mock-answer-box:focus {
+            border-color: #6366f1;
+            box-shadow:
+                0 0 0 4px rgba(99, 102, 241, 0.10);
+        }
+
+
+        /* =========================================
+           VOICE
+        ========================================= */
+
+        .lyra-mock-voice-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 14px;
+            margin-top: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            background: #f8fafc;
+        }
+
+
+        .lyra-mock-voice-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+
+        .lyra-mock-voice-btn {
+            border: 0;
+            border-radius: 11px;
+            padding: 10px 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+
+        .lyra-mock-start-voice {
+            background: #4f46e5;
+            color: white;
+        }
+
+
+        .lyra-mock-start-voice:hover {
+            background: #4338ca;
+        }
+
+
+        .lyra-mock-stop-voice {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+
+        .lyra-mock-voice-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+
+        .lyra-mock-listening {
+            color: #dc2626 !important;
+            font-weight: 800;
+        }
+
+
+        .lyra-mock-hint {
+            display: block;
+            margin-top: 8px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+
+        /* =========================================
+           NEXT
+        ========================================= */
+
+        .lyra-mock-next-area {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+
+        .lyra-mock-next-btn {
+            min-width: 190px;
+            height: 50px;
+            border: 0;
+            border-radius: 13px;
+            background:
+                linear-gradient(135deg,
+                    #4f46e5,
+                    #0891b2);
+            color: white;
+            font-weight: 850;
+            cursor: pointer;
+        }
+
+
+        .lyra-mock-next-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+
+        /* =========================================
+           EVALUATION
+        ========================================= */
+
+        .lyra-mock-evaluation {
+            display: none;
+            margin-top: 22px;
+            padding: 22px;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+            background: #f8fafc;
+        }
+
+
+        .lyra-mock-evaluation-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+
+        .lyra-mock-evaluation-header h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+
+        .lyra-mock-evaluation-score {
+            color: #4f46e5;
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+
+        .lyra-mock-metrics {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+
+        .lyra-mock-metric {
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            background: white;
+        }
+
+
+        .lyra-mock-metric small {
+            display: block;
+            margin-bottom: 5px;
+            color: #64748b;
+        }
+
+
+        .lyra-mock-metric strong {
+            font-size: 20px;
+        }
+
+
+        .lyra-mock-feedback {
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 13px;
+            background: white;
+        }
+
+
+        .lyra-mock-feedback p {
+            margin: 7px 0 0;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           FINAL REPORT
+        ========================================= */
+
+        .lyra-mock-report {
+            display: none;
+        }
+
+
+        .lyra-mock-report-title {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+
+        .lyra-mock-report-title h2 {
+            font-size: 30px;
+            font-weight: 850;
+        }
+
+
+        .lyra-mock-score {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle,
+                    white 61%,
+                    transparent 62%),
+                conic-gradient(#4f46e5 0deg,
+                    #06b6d4 260deg,
+                    #e2e8f0 260deg);
+            box-shadow:
+                0 15px 35px rgba(79, 70, 229, 0.15);
+        }
+
+
+        .lyra-mock-score span {
+            font-size: 34px;
+            font-weight: 900;
+            color: #1e293b;
+        }
+
+
+        .lyra-mock-report-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+
+        .lyra-mock-report-box {
+            padding: 22px;
+            border: 1px solid #e2e8f0;
+            border-radius: 17px;
+            background: #f8fafc;
+        }
+
+
+        .lyra-mock-report-box h3 {
+            margin-bottom: 15px;
+            font-size: 17px;
+        }
+
+
+        .lyra-mock-report-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+
+        .lyra-mock-report-box li {
+            margin-bottom: 9px;
+            color: #475569;
+            line-height: 1.5;
+        }
+
+
+        .lyra-mock-back-btn {
+            display: inline-flex;
+            margin-top: 30px;
+            padding: 12px 22px;
+            border-radius: 12px;
+            background: #0f172a;
+            color: white;
+            text-decoration: none;
+            font-weight: 750;
+        }
+
+
+        .lyra-mock-back-btn:hover {
+            color: white;
+            background: #1e293b;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 850px) {
+
+            .lyra-mock-setup-grid,
+            .lyra-mock-report-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .lyra-mock-metrics {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .lyra-mock-navbar-inner {
+                width: 92%;
+            }
+
+
+            .lyra-mock-logo {
+                width: 125px;
+                height: 50px;
+            }
+
+
+            .lyra-mock-wrapper {
+                width: 94%;
+                padding-top: 28px;
+            }
+
+
+            .lyra-mock-card {
+                padding: 20px;
+                border-radius: 18px;
+            }
+
+
+            .lyra-mock-top {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+
+            .lyra-mock-question-text {
+                font-size: 18px;
+            }
+
+
+            .lyra-mock-voice-panel {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+
+            .lyra-mock-next-area {
+                justify-content: stretch;
+            }
+
+
+            .lyra-mock-next-btn {
+                width: 100%;
+            }
+
+
+            .lyra-mock-metrics {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+    </style>
+
 </head>
 
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
 
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
+    <div class="lyra-mock-page">
 
-            <a class="navbar-brand fw-bold" href="/dashboard">
-                <span class="lyra-logo">LYRA</span>
-                <span class="ms-2">AI Mock Interview</span>
-            </a>
 
-            <a href="/dashboard" class="btn btn-outline-light">
-                Dashboard
-            </a>
+        <!-- ========================================= -->
+        <!-- HEADER -->
+        <!-- ========================================= -->
 
-        </div>
-    </nav>
+        <header class="lyra-mock-navbar">
 
+            <div class="lyra-mock-navbar-inner">
 
-    <!-- ================= MAIN ================= -->
 
-    <div class="mock-container">
+                <a href="/dashboard" class="lyra-mock-brand">
 
-        <!-- Header -->
-
-        <div class="mock-header">
-
-            <div class="lyra-icon">
-                🤖
-            </div>
-
-            <h1>LYRA AI Mock Interview</h1>
-
-            <p>
-                Practice your interview with your personal AI interviewer.
-            </p>
-
-        </div>
-
-
-        <!-- ================= SETUP ================= -->
-
-        <div id="setupSection" class="setup-card">
-
-            <h2>🎯 Start Your Mock Interview</h2>
-
-            <p class="text-muted">
-                Select your interview preferences before starting.
-            </p>
-
-
-            <div class="form-group">
-
-                <label for="role">
-                    Job Role
-                </label>
-
-                <select id="role" class="form-select">
-
-                    <option value="Frontend Developer">
-                        Frontend Developer
-                    </option>
-
-                    <option value="Backend Developer">
-                        Backend Developer
-                    </option>
-
-                    <option value="Full Stack Developer">
-                        Full Stack Developer
-                    </option>
-
-                    <option value="Python Developer">
-                        Python Developer
-                    </option>
-
-                    <option value="Java Developer">
-                        Java Developer
-                    </option>
-
-                    <option value="Data Analyst">
-                        Data Analyst
-                    </option>
-
-                    <option value="Data Scientist">
-                        Data Scientist
-                    </option>
-
-                    <option value="AI / ML Engineer">
-                        AI / ML Engineer
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="difficulty">
-                    Difficulty Level
-                </label>
-
-                <select id="difficulty" class="form-select">
-
-                    <option value="Easy">
-                        Easy
-                    </option>
-
-                    <option value="Medium" selected>
-                        Medium
-                    </option>
-
-                    <option value="Hard">
-                        Hard
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="questionCount">
-                    Number of Questions
-                </label>
-
-                <select id="questionCount" class="form-select">
-
-                    <option value="5">
-                        5 Questions
-                    </option>
-
-                    <option value="10">
-                        10 Questions
-                    </option>
-
-                    <option value="15">
-                        15 Questions
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <button id="startMockBtn" class="start-mock-btn">
-                🚀 Start Mock Interview
-            </button>
-
-
-            <!-- Loading -->
-
-            <div id="setupLoading" class="loading">
-
-                <div class="spinner"></div>
-
-                <p>
-                    LYRA is preparing your interview...
-                </p>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- ================= INTERVIEW ================= -->
-
-        <div id="interviewSection" class="interview-card">
-
-            <!-- Progress -->
-
-            <div class="progress-container">
-
-                <div class="progress-text">
-
-                    <span>
-                        Interview Progress
-                    </span>
-
-                    <span id="progressText">
-                        Question 1 of 5
-                    </span>
-
-                </div>
-
-                <div class="progress-bar">
-
-                    <div id="progressFill" class="progress-fill"></div>
-
-                </div>
-
-            </div>
-
-
-            <!-- LYRA -->
-
-            <div class="lyra-message">
-
-                <div class="lyra-avatar">
-                    L
-                </div>
-
-                <div class="lyra-message-content">
-
-                    <strong>LYRA</strong>
-
-                    <p id="lyraMessage">
-                        Welcome! Let's begin your mock interview.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- Question -->
-
-            <div class="question-box">
-
-                <h3>
-                    Interview Question
-                </h3>
-
-                <p id="questionText">
-                    Your question will appear here.
-                </p>
-
-            </div>
-
-
-            <!-- Answer -->
-
-            <div class="answer-box">
-
-                <label for="answer">
-                    <strong>Your Answer</strong>
-                </label>
-
-                <textarea id="answer" placeholder="Type your answer here..."></textarea>
-
-                <small class="text-muted">
-                    Try to answer clearly and explain your reasoning.
-                </small>
-
-            </div>
-
-
-            <!-- Evaluation -->
-
-            <div id="evaluationBox" class="evaluation-box">
-
-                <h3>
-                    🤖 LYRA Evaluation
-                </h3>
-
-                <div id="evaluationContent"></div>
-
-            </div>
-
-
-            <!-- Buttons -->
-
-            <div class="interview-buttons">
-
-                <button id="nextBtn" class="next-btn">
-                    Next Question →
-                </button>
-
-            </div>
-
-
-            <!-- Loading -->
-
-            <div id="questionLoading" class="loading">
-
-                <div class="spinner"></div>
-
-                <p>
-                    LYRA is thinking...
-                </p>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- ================= REPORT ================= -->
-
-        <div id="reportSection" class="report-card">
-
-            <h2 class="text-center">
-                🎉 Mock Interview Completed
-            </h2>
-
-            <p class="text-center text-muted">
-                Here's your performance summary from LYRA.
-            </p>
-
-
-            <div class="score-circle">
-
-                <span id="overallScore">
-                    0%
-                </span>
-
-            </div>
-
-
-            <div class="report-section">
-
-                <h3>
-                    ✅ Strengths
-                </h3>
-
-                <ul id="strengthsList"></ul>
-
-            </div>
-
-
-            <div class="report-section">
-
-                <h3>
-                    ❌ Weaknesses
-                </h3>
-
-                <ul id="weaknessesList"></ul>
-
-            </div>
-
-
-            <div class="report-section">
-
-                <h3>
-                    💡 AI Suggestions
-                </h3>
-
-                <ul id="suggestionsList"></ul>
-
-            </div>
-
-
-            <div class="text-center">
-
-                <a href="/dashboard" class="back-btn">
-                    ← Back to Dashboard
+                    <!-- <img src="{{ url_for('static', filename='images/lyra-ai-interview-coach-logo.png') }}"
+                        alt="LYRA AI Interview Coach" class="lyra-mock-logo"> -->
+                <h1>LYRA</h1>
+                <br>
+                <br>
+                <h5>AI</h5>
                 </a>
 
+
+                <a href="/dashboard" class="lyra-mock-dashboard-btn">
+                    Dashboard
+                </a>
+
+
             </div>
 
-        </div>
+        </header>
+
+
+        <!-- ========================================= -->
+        <!-- MAIN -->
+        <!-- ========================================= -->
+
+        <main class="lyra-mock-wrapper">
+
+
+            <!-- HERO -->
+
+            <section class="lyra-mock-hero">
+
+                <div class="lyra-mock-hero-badge">
+                    ✨ AI Powered Interview Practice
+                </div>
+
+
+                <h1 class="lyra-mock-hero-title">
+                    Practice. Speak. Improve.
+                </h1>
+
+
+                <p class="lyra-mock-hero-description">
+                    Experience a realistic interview with LYRA.
+                    Answer using your voice or keyboard and
+                    receive AI-powered feedback.
+                </p>
+
+            </section>
+
+
+            <!-- MAIN CARD -->
+
+            <section class="lyra-mock-card">
+
+
+                <!-- ================================= -->
+                <!-- SETUP -->
+                <!-- ================================= -->
+
+                <div id="setupSection" class="lyra-mock-setup">
+
+                    <div class="lyra-mock-section-heading">
+
+                        <h2>
+                            🎯 Configure Your Interview
+                        </h2>
+
+                        <p>
+                            Choose your role, difficulty
+                            and number of questions.
+                        </p>
+
+                    </div>
+
+
+                    <div class="lyra-mock-setup-grid">
+
+
+                        <div class="lyra-mock-field">
+
+                            <label for="role">
+                                Job Role
+                            </label>
+
+                            <select id="role">
+
+                                <option value="Frontend Developer">
+                                    Frontend Developer
+                                </option>
+
+                                <option value="Backend Developer">
+                                    Backend Developer
+                                </option>
+
+                                <option value="Full Stack Developer">
+                                    Full Stack Developer
+                                </option>
+
+                                <option value="Python Developer">
+                                    Python Developer
+                                </option>
+
+                                <option value="Java Developer">
+                                    Java Developer
+                                </option>
+
+                                <option value="Data Analyst">
+                                    Data Analyst
+                                </option>
+
+                                <option value="Data Scientist">
+                                    Data Scientist
+                                </option>
+
+                                <option value="AI / ML Engineer">
+                                    AI / ML Engineer
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="lyra-mock-field">
+
+                            <label for="difficulty">
+                                Difficulty
+                            </label>
+
+                            <select id="difficulty">
+
+                                <option value="Easy">
+                                    Easy
+                                </option>
+
+                                <option value="Medium" selected>
+                                    Medium
+                                </option>
+
+                                <option value="Hard">
+                                    Hard
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="lyra-mock-field">
+
+                            <label for="questionCount">
+                                Questions
+                            </label>
+
+                            <select id="questionCount">
+
+                                <option value="5">
+                                    5 Questions
+                                </option>
+
+                                <option value="10">
+                                    10 Questions
+                                </option>
+
+                                <option value="15">
+                                    15 Questions
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <button id="startMockBtn" class="lyra-mock-start-btn" type="button">
+                        🚀 Start AI Mock Interview
+                    </button>
+
+
+                    <div id="setupLoading" class="lyra-mock-loading">
+
+                        <div class="lyra-mock-spinner"></div>
+
+                        <p class="mt-3 mb-0 text-muted">
+                            LYRA is preparing your interview...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- INTERVIEW -->
+                <!-- ================================= -->
+
+                <div id="interviewSection" class="lyra-mock-interview">
+
+
+                    <div class="lyra-mock-top">
+
+
+                        <div class="lyra-mock-active-pill">
+                            ● AI Interview Active
+                        </div>
+
+
+                        <div class="lyra-mock-progress-wrapper">
+
+                            <div class="lyra-mock-progress-info">
+
+                                <span>
+                                    Interview Progress
+                                </span>
+
+                                <span id="progressText">
+                                    Question 1 of 5
+                                </span>
+
+                            </div>
+
+
+                            <div class="lyra-mock-progress">
+
+                                <div id="progressFill" class="lyra-mock-progress-fill"></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- AI MESSAGE -->
+
+                    <div class="lyra-mock-ai-message">
+
+                        <div class="lyra-mock-avatar">
+                            L
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                LYRA AI Interviewer
+                            </strong>
+
+                            <p id="lyraMessage">
+                                Welcome! Let's begin
+                                your mock interview.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- QUESTION -->
+
+                    <div class="lyra-mock-question">
+
+                        <div class="lyra-mock-question-label">
+                            Interview Question
+                        </div>
+
+                        <p id="questionText" class="lyra-mock-question-text">
+                            Your question will
+                            appear here.
+                        </p>
+
+                    </div>
+
+
+                    <!-- ANSWER -->
+
+                    <div>
+
+                        <div class="lyra-mock-answer-heading">
+
+                            <strong>
+                                Your Answer
+                            </strong>
+
+                            <span class="lyra-mock-answer-hint">
+                                Speak or type your response
+                            </span>
+
+                        </div>
+
+
+                        <textarea id="answer" class="lyra-mock-answer-box"
+                            placeholder="Type your answer here or use the microphone..."></textarea>
+
+
+                        <!-- VOICE -->
+
+                        <div class="lyra-mock-voice-panel">
+
+                            <div class="lyra-mock-voice-buttons">
+
+                                <button id="startSpeakingBtn" type="button"
+                                    class="lyra-mock-voice-btn lyra-mock-start-voice">
+                                    🎤 Start Speaking
+                                </button>
+
+
+                                <button id="stopSpeakingBtn" type="button"
+                                    class="lyra-mock-voice-btn lyra-mock-stop-voice" disabled>
+                                    ⏹ Stop
+                                </button>
+
+                            </div>
+
+
+                            <div id="listeningStatus">
+                                🎙 Microphone is off
+                            </div>
+
+                        </div>
+
+
+                        <small class="lyra-mock-hint">
+                            Your speech is converted to text
+                            using browser speech recognition.
+                            LYRA then analyzes your answer using AI.
+                        </small>
+
+                    </div>
+
+
+                    <!-- EVALUATION -->
+
+                    <div id="evaluationBox" class="lyra-mock-evaluation">
+
+                        <div class="lyra-mock-evaluation-header">
+
+                            <h4>
+                                🤖 LYRA Evaluation
+                            </h4>
+
+                            <div id="evaluationScore" class="lyra-mock-evaluation-score">
+                                0%
+                            </div>
+
+                        </div>
+
+
+                        <div id="evaluationContent"></div>
+
+                    </div>
+
+
+                    <!-- NEXT -->
+
+                    <div class="lyra-mock-next-area">
+
+                        <button id="nextBtn" type="button" class="lyra-mock-next-btn">
+                            Next Question →
+                        </button>
+
+                    </div>
+
+
+                    <div id="questionLoading" class="lyra-mock-loading">
+
+                        <div class="lyra-mock-spinner"></div>
+
+                        <p class="mt-3 mb-0 text-muted">
+                            LYRA is analyzing your answer...
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- FINAL REPORT -->
+                <!-- ================================= -->
+
+                <div id="reportSection" class="lyra-mock-report">
+
+
+                    <div class="lyra-mock-report-title">
+
+                        <div class="lyra-mock-hero-badge">
+                            🎉 Interview Completed
+                        </div>
+
+                        <h2>
+                            Your LYRA Performance Report
+                        </h2>
+
+                        <p class="text-muted">
+                            Here's your AI-generated
+                            performance summary.
+                        </p>
+
+                    </div>
+
+
+                    <div class="lyra-mock-score">
+
+                        <span id="overallScore">
+                            0%
+                        </span>
+
+                    </div>
+
+
+                    <div class="lyra-mock-report-grid">
+
+
+                        <div class="lyra-mock-report-box">
+
+                            <h3>
+                                💪 Strengths
+                            </h3>
+
+                            <ul id="strengthsList"></ul>
+
+                        </div>
+
+
+                        <div class="lyra-mock-report-box">
+
+                            <h3>
+                                📌 Weaknesses
+                            </h3>
+
+                            <ul id="weaknessesList"></ul>
+
+                        </div>
+
+
+                        <div class="lyra-mock-report-box">
+
+                            <h3>
+                                💡 Suggestions
+                            </h3>
+
+                            <ul id="suggestionsList"></ul>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="text-center">
+
+                        <a href="/dashboard" class="lyra-mock-back-btn">
+                            ← Back to Dashboard
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+        </main>
 
     </div>
 
 
-    <!-- JavaScript -->
-
-    <script src="{{ url_for('static', filename='js/mock_interview.js') }}">
-    </script>
+    <script src="{{ url_for('static', filename='js/mock_interview.js') }}?v=30"></script>
 
 </body>
 

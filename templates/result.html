@@ -1,107 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interview Result - AI Interview Coach</title>
+
+    <title>Interview Result - LYRA AI Interview Coach</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/style.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+
 </head>
+
 
 <body class="bg-light">
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="#"><h1><b>LYRA</b></h1>AI Interview Coach</a>
 
-        <div class="ms-auto">
-            <a href="/dashboard" class="btn btn-outline-light">
-                Dashboard
-                <a href="/dashboard">Back to Dashboard</a>
-            </a>
+    <div class="container mt-5 mb-5">
+
+
+        <div class="card shadow">
+
+
+            <div class="card-header bg-success text-white text-center">
+
+                <h2 class="mb-0">
+                    Interview Result
+                </h2>
+
+            </div>
+
+
+            <div class="card-body">
+
+
+                <div class="text-center mb-4">
+
+                    <div class="display-3 text-success">
+                        0%
+                    </div>
+
+                    <h3>
+                        Interview Completed!
+                    </h3>
+
+                    <p class="text-muted">
+                        Your interview has been evaluated by LYRA AI.
+                    </p>
+
+                </div>
+
+
+                <hr>
+
+
+                <div class="row text-center mb-4">
+
+
+                    <div class="col-md-4">
+
+                        <h5>
+                            Total Questions
+                        </h5>
+
+                        <h3 id="totalQuestions">
+                            0
+                        </h3>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <h5>
+                            Correct Answers
+                        </h5>
+
+                        <h3 id="correctAnswers">
+                            0
+                        </h3>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <h5>
+                            Overall Score
+                        </h5>
+
+                        <h3 class="text-success">
+                            <span id="scoreText">
+                                0%
+                            </span>
+                        </h3>
+
+                    </div>
+
+
+                </div>
+
+
+                <hr>
+
+
+                <div class="mb-4">
+
+                    <h3 class="text-success">
+                        ✅ Strengths
+                    </h3>
+
+                    <ul id="strengths">
+                    </ul>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <h3 class="text-danger">
+                        ❌ Weaknesses
+                    </h3>
+
+                    <ul id="weaknesses">
+                    </ul>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <h3 class="text-primary">
+                        💡 AI Suggestions
+                    </h3>
+
+                    <ul id="suggestions">
+                    </ul>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <h3>
+                        Question Feedback
+                    </h3>
+
+                    <ul id="feedback">
+                    </ul>
+
+                </div>
+
+
+                <div class="text-center mt-4">
+
+                    <button class="btn btn-primary me-2" id="dashboardBtn">
+                        Back to Dashboard
+                    </button>
+
+
+                    <button class="btn btn-warning me-2" id="retakeBtn">
+                        Retake Interview
+                    </button>
+
+
+                    <button class="btn btn-success" id="downloadBtn">
+                        Download Report
+                    </button>
+
+                </div>
+
+
+            </div>
+
         </div>
+
     </div>
-</nav>
 
-<div class="container my-5">
 
-    <!-- Result Card -->
-    <div class="card shadow-lg">
+    <script src="{{ url_for('static', filename='js/result.js') }}"></script>
 
-        <div class="card-header bg-success text-white text-center">
-            <h2>Interview Result</h2>
-        </div>
-
-        <div class="card-body">
-
-            <div class="text-center mb-4">
-                <h1 class="display-3 text-success">85%</h1>
-                <h4>Congratulations!</h4>
-                <p>You have successfully completed the interview.</p>
-            </div>
-
-            <hr>
-
-            <div class="row text-center">
-
-                <div class="col-md-4">
-                    <h5>Total Questions</h5>
-                    <h3>10</h3>
-                </div>
-
-                <div class="col-md-4">
-                    <h5>Correct Answers</h5>
-                    <h3>8</h3>
-                </div>
-
-                <div class="col-md-4">
-                    <h5>Overall Score</h5>
-                    <h3>85%</h3>
-                </div>
-
-            </div>
-
-            <hr>
-
-            <div class="mt-4">
-                <h4 class="text-success">✅ Strengths</h4>
-                <ul>
-                    <li>Good understanding of HTML & CSS.</li>
-                    <li>Clear explanation of JavaScript concepts.</li>
-                    <li>Confident communication.</li>
-                </ul>
-            </div>
-
-            <div class="mt-4">
-                <h4 class="text-danger">❌ Weaknesses</h4>
-                <ul>
-                    <li>Need better knowledge of React.js.</li>
-                    <li>Improve problem-solving speed.</li>
-                    <li>Practice API integration concepts.</li>
-                </ul>
-            </div>
-
-            <div class="mt-4">
-                <h4 class="text-primary">💡 AI Suggestions</h4>
-                <ul>
-                    <li>Practice coding for at least 1 hour daily.</li>
-                    <li>Revise JavaScript ES6 concepts.</li>
-                    <li>Build more frontend projects.</li>
-                </ul>
-            </div>
-
-            <div class="mt-5 text-center">
-
-                <a href="/dashboard" class="btn btn-primary me-2">
-                    Back to Dashboard
-                </a>
-
-                <button class="btn btn-success me-2">
-                    Download Report
-                </button>
-
-                <button class="
-                <script src="static/js/result.js"></script>
 </body>
+
+</html>

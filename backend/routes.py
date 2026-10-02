@@ -45,6 +45,15 @@ def interview():
     return render_template("interview.html")
 
 
+@main_bp.route("/live_interview")
+def live_interview():
+
+    if "user" not in session:
+        return redirect("/login")
+
+    return render_template("live_interview.html")
+
+
 @main_bp.route("/result")
 def result():
 
